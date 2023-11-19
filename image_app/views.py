@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 
-from .forms import ImageForm
+from .forms import ImageForm, ExpiringLinkForm
+from .models import ImageModel, ExpiringLinkModel
 # Create your views here.
 
 
@@ -16,3 +17,60 @@ class ImageFormView(LoginRequiredMixin, FormView):
         # sended_image = sended_image.zi
         sended_image.save()
         return super().form_valid(form)
+
+
+class GenerateExpiringLinkView(LoginRequiredMixin, View):
+    template_name = 'imageapp/generate-exp-link.html'
+
+    def get(self, request, image_id, th_time=310):
+        image = ImageModel.objects.get(pk=image_id)
+        form = ExpiringLinkForm()
+
+        try:
+            link = ExpiringLinkModel.objects.get(img=image)
+            return render(request, self.template_name,
+                          {'image': image, 'form': form, 'links': link})
+        except ExpiringLinkModel.DoesNotExist:
+            return render(request, self.template_name,
+                          {'image': image, 'form': form, 'links': False})
+
+    def post(self, request, image_id, th_time=310):
+        image = ImageModel.objects.get(pk=image_id)
+        form = ExpiringLinkForm(
+            request.POST)  # request.POSt - for make work form in adding links
+
+        if 'create_link' in request.POST:
+
+            if form.is_valid():
+                link = form.save(commit=False)
+                link.img = image
+                link.save()
+
+                try:
+                    link = ExpiringLinkModel.objects.get(img=image)
+                    return render(request, self.template_name,
+                                  {'image': image, 'form': form,
+                                   'links': link})
+                except ExpiringLinkModel.DoesNotExist:
+                    return render(request, self.template_name,
+                                  {'image': image, 'form': form,
+                                   'links': False})
+            else:
+                print('Error in form', form.errors)
+
+            return render(request, self.template_name,
+                          {'image': image, 'form': form})
+
+        elif 'delete_links' in request.POST:
+            form = ExpiringLinkForm()
+
+            try:
+                lin = request.POST.get('delete_links')
+                link = ExpiringLinkModel.objects.get(name=lin)
+                link.delete()
+
+                return render(request, self.template_name,
+                              {'image': image, 'form': form, 'links': False})
+            except ExpiringLinkModel.DoesNotExist:
+                return render(request, self.template_name,
+                              {'image': image, 'form': form, 'links': False})
