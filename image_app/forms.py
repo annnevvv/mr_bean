@@ -2,7 +2,7 @@ from django import forms
 from .models import ImageModel, ExpiringLinkModel
 
 
-class UploadedImageForm(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
         model = ImageModel
         fields = ['title', 'image_file', 'short_description']
