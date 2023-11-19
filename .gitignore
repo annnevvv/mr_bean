@@ -297,3 +297,8 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# UTILS # 
+z_utils/
+z_utils/*
+
