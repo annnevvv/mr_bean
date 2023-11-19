@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'image_app',
-    'api_app',
-    'users_app'
+    # 'api_app',
+    # 'users_app'
 ]
 
 
