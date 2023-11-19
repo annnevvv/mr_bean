@@ -3,14 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from image_app.models import MiniatureSize
+from image_app.models import MiniatureSizeModel
 
 # Create your models here.
 
 
 class UserAccountTier(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    mini_size = models.ManyToManyField(MiniatureSize, null=True)
+    mini_size = models.ManyToManyField(MiniatureSizeModel, null=True)
     presence_link_to_org_file = models.BooleanField(default=0)
     ability_to_generate_expiring_links = models.BooleanField(default=0)
 
