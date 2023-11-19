@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from z_utils.passwords import DATABASES_POSTGRESSQL_NAME, DATABASES_POSTGRESSQL_USER, DATABASES_POSTGRESSQL_PASSWORD
 from z_utils.passwords import SEC_KEY
 from pathlib import Path
 
@@ -38,7 +39,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    'image_app',
+    'api_app',
+    'users_app'
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PREMISSION_CLASSES': [
+        'rest_framework.premissions.DjangoModelPremissionOrAnonReadOnly'
+    ]
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +70,7 @@ ROOT_URLCONF = 'mr_bean.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,6 +95,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': DATABASES_POSTGRESSQL_NAME,
+#         'USER': DATABASES_POSTGRESSQL_USER,
+#         'PASSWORD': DATABASES_POSTGRESSQL_PASSWORD
+#     }
+# }
 
 
 # Password validation
