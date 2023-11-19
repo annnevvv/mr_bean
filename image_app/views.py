@@ -3,7 +3,6 @@ from django.shortcuts import render
 
 from .forms import ImageForm, ExpiringLinkForm
 from .models import ImageModel, ExpiringLinkModel
-# Create your views here.
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -14,7 +13,6 @@ class ImageFormView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         sended_image = form.save(commit=False)
         sended_image.user = self.request.user
-        # sended_image = sended_image.zi
         sended_image.save()
         return super().form_valid(form)
 
@@ -37,7 +35,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
     def post(self, request, image_id, th_time=310):
         image = ImageModel.objects.get(pk=image_id)
         form = ExpiringLinkForm(
-            request.POST)  # request.POSt - for make work form in adding links
+            request.POST)
 
         if 'create_link' in request.POST:
 
