@@ -1,12 +1,12 @@
 from django.shortcuts import render
-
+from django.views.generic import TemplateView, ListView
 
 from .forms import ImageForm, ExpiringLinkForm
 from .models import ImageModel, ExpiringLinkModel
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
-    template_name = 'imageapp/form-send-img.html'
+    template_name = 'imageapp/form_upload_img.html'
     form_class = ImageForm
     success_url = 'form_send_img_success'
 
@@ -17,8 +17,12 @@ class ImageFormView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
+class SuccessView(TemplateView):
+    template_name = 'templates/success.html'
+
+
 class GenerateExpiringLinkView(LoginRequiredMixin, View):
-    template_name = 'imageapp/generate-exp-link.html'
+    template_name = 'imageapp/generate_exp_link.html'
 
     def get(self, request, image_id, th_time=310):
         image = ImageModel.objects.get(pk=image_id)
