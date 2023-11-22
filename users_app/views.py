@@ -8,7 +8,7 @@ from django.contrib.auth import login
 
 from image_app.models import ImageModel
 
-from .models import UserAccountTier, UserProfile
+from .models import UserAccountTier, UserProfileModel
 
 
 # Create your views here.
@@ -33,7 +33,7 @@ class UserDasboard(LoginRequiredMixin, View):
     def get(self, request):
         tiers = UserAccountTier.objects.all()
         user = request.user
-        profile = UserProfile.objects.get(user=user)
+        profile = UserProfileModel.objects.get(user=user)
         img_sended_by_user = ImageModel.objects.filter(
             user=user.id).order_by('-uploaded_at')
 

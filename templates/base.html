@@ -1,0 +1,267 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;1,100;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+
+  <body>
+    <header
+      style="
+        top: 0;
+        z-index: 1;
+        position: sticky;
+        border-bottom: 2px solid rgb(150, 150, 150);
+      "
+    >
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          {% comment %}
+          <a href="{% url 'users:dashboard' %}">
+            {% endcomment %}
+            <img
+              style="max-height: 70px"
+              class="logo"
+              src="{% static 'images/mr_Bean2.png' %}"
+            />
+          </a>
+          <a
+            style="
+              font-weight: bold;
+              font-size: 2rem;
+              color: darkred;
+              border-right: 1px solid grey;
+            "
+            class="nav-link pe-lg-4 ps-lg-2"
+            href="/api/"
+            target="_blank"
+          >
+            API
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item ps-lg-2">
+                <a class="nav-link" target="_blank">All img (API view)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" target="_blank">Yours img (API view)</a>
+              </li>
+              <li class="nav-item me-5 pe-lg-5 ps-lg-5">
+                <a
+                  class="nav-link disabled pe-lg-5 ms-lg-5 me-lg-5"
+                  href="#"
+                  tabindex="-1"
+                  aria-disabled="true"
+                >
+                  “I never lose, I either win or I learn.”
+                </a>
+              </li>
+
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a
+                  style="border-right: 1px solid grey"
+                  class="nav-link"
+                  href="{% url 'users_app:dashboard' %}"
+                  >DASHBOARD</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  style="color: darkred"
+                  class="nav-link ms-lg-1 ps-lg-1"
+                  href="{% url 'users_app:logout' %}"
+                  >LOGOUT</a
+                >
+              </li>
+              <li class="nav-item">
+                <p
+                  style="color: grey"
+                  class="nav-link ms-lg-5 ps-lg-1"
+                  href="{% url 'users_app:logout' %}"
+                >
+                  {{ user.username }}
+                </p>
+              </li>
+              <li>
+                <div
+                  style="
+                    width: 3rem;
+                    height: 3rem;
+                    border-radius: 50%;
+                    overflow: hidden;
+                  "
+                >
+                  <img
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      object-position: center;
+                    "
+                    src="{{ profile.avatar.url }}"
+                  />
+                </div>
+              </li>
+              {% else %}
+              <li class="ms-lg-5 ps-lg-5 nav-item">
+                <a
+                  style="color: darkred"
+                  class="nav-link ms-lg-5 ps-lg-5"
+                  href="{% url 'users:login' %}"
+                  >LOGIN</a
+                >
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div>{% block content %} {% endblock content %}</div>
+    </main>
+
+    <footer
+      style="
+        bottom: 0;
+        z-index: 1;
+        position: sticky;
+        border-top: 2px solid rgb(150, 150, 150);
+      "
+    >
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-5 ps-lg-5 ps-lg-5">
+              <li class="nav-item ps-lg-2">
+                <a
+                  class="nav-link"
+                  href="https://www.linkedin.com/"
+                  target="_blank"
+                >
+                  <i class="bi bi-linkedin"></i>
+                  LinkeIn
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  href="https://github.com/annnevvv?tab=repositories"
+                  target="_blank"
+                >
+                  <i class="bi bi-github"></i>
+                  GitHub</a
+                >
+              </li>
+              <li class="nav-item me-5 pe-lg-5 ps-lg-5">
+                <a
+                  class="nav-link disabled pe-lg-5 ms-lg-5 me-lg-5"
+                  href="#"
+                  tabindex="-1"
+                  aria-disabled="true"
+                >
+                  “I never lose, I either win or I learn.”
+                </a>
+              </li>
+
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a
+                  style="border-right: 1px solid grey"
+                  class="nav-link"
+                  href="{% url 'users_app:dashboard' %}"
+                  >DASHBOARD</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  style="color: darkred"
+                  class="nav-link ms-lg-1 ps-lg-1"
+                  href="{% url 'users_app:logout' %}"
+                  >LOGOUT</a
+                >
+              </li>
+              {% else %}
+              <li class="ms-lg-5 ps-lg-5 nav-item">
+                <a
+                  style="color: darkred"
+                  class="nav-link ms-lg-5 ps-lg-5"
+                  href="{% url 'users:login' %}"
+                  >LOGIN</a
+                >
+              </li>
+              {% endif %}
+            </ul>
+            <a href="{% url 'users_app:dashboard' %}">
+              <img style="max-height: 30px" class="logo" src="" />
+            </a>
+            <a
+              style="
+                font-weight: bold;
+                font-size: 1rem;
+                color: darkred;
+                border-left: 1px solid grey;
+              "
+              class="nav-link"
+              href="/api/"
+              target="_blank"
+            >
+              API
+            </a>
+          </div>
+        </div>
+      </nav>
+    </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

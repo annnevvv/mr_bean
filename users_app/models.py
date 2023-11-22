@@ -22,7 +22,7 @@ def user_avatar_image_path(instance, filename):
     return f'users/{instance.user.id}/avatar/{filename}'
 
 
-class UserProfile(models.Model):
+class UserProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tier = models.ForeignKey(UserAccountTier,
                              on_delete=models.CASCADE,
@@ -43,4 +43,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
+    instance.userprofilemodel.save()
+
+
+# admn_user = User.objects.get(username='admn')
+# user_profile = UserProfileModel.objects.create(user=admn_user)
+
+# # user_profile.inne_pole = 'jakas_wartosc'
+# user_profile.save()

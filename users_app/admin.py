@@ -3,7 +3,7 @@ from django.contrib import admin
 from image_app.admin import MiniatureSizeInline
 
 
-from .models import UserAccountTier, UserProfile, User
+from .models import UserAccountTier, UserProfileModel, User
 
 # Register your models here.
 
@@ -17,7 +17,7 @@ class UserAccountTierAdmin(admin.ModelAdmin):
 
 
 class UserProfileInline(admin.StackedInline):
-    model = UserProfile
+    model = UserProfileModel
     can_delete = False
 
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 
 from .models import ImageModel, MiniatureSizeModel, ExpiringLinkModel, ImageCommentModel
-from users_app.models import UserAccountTier, UserProfile
+from users_app.models import UserAccountTier, UserProfileModel
 
 # Register your models here.
 
