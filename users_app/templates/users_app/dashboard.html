@@ -1,0 +1,188 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% block
+content %}
+<style>
+  style="list-style: none;
+  padding-left: 0;
+  text-align: center;
+</style>
+
+<article style="margin: 0 auto; text-align: center">
+  <h1 style="margin: 2rem">Your account - Welcome @{{ user }} !</h1>
+  <h2></h2>
+  <section class="d-flex justify-content-center">
+    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+      <a
+        class="card-img-top"
+        href="{{ profile.avatar }}"
+        target="_blank"
+        style="
+          margin: auto;
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          overflow: hidden;
+        "
+      >
+        <img src="{{ profile.avatar.url }}" />
+      </a>
+      <h3>Your data:</h3>
+      <ol style="list-style: none; padding-left: 0; text-align: center">
+        <li>Credit: {{ profile.points }}</li>
+        <li>Score: {% user_comment_counter user %}</li>
+        <li>Uploaded pictue: {% total_img user %}</li>
+        <li>Published pictue: {% public_img_counter user %}</li>
+      </ol>
+    </div>
+
+    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+      <a
+        class="card-img-top"
+        href="https://www.youtube.com/user/MrBean"
+        target="_blank"
+        style="
+          margin: auto;
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          overflow: hidden;
+        "
+      >
+        <img src="{% static 'images/MrBeanYT.png' %}" />
+      </a>
+
+      <div class="card-body">
+        <h2>Links to:</h2>
+        <lu style="list-style: none; padding-left: 0; text-align: center">
+          <li>
+            <a href="{% url 'imageapp:form-send-img' %} " target="_blank">
+              Add new picture </a
+            >- Upload form
+          </li>
+          <li>
+            <a
+              href="{% url 'imageapp:sended-img-user-list-API' %} "
+              target="_blank"
+              >Images sended by you</a
+            >- API view
+          </li>
+          <li>
+            <a href="{% url 'imageapp:sended-img-list_API' %} " target="_blank"
+              >All sended images</a
+            >- API view
+          </li>
+          <li>
+            <a href="{% url 'imageapp:all-public-img' %} " target="_blank"
+              >All public images</a
+            >
+            - Gallery View
+          </li>
+        </lu>
+      </div>
+    </div>
+
+    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+      <h3>Avidable membership levels:</h3>
+      <ol style="list-style: none; padding-left: 0; text-align: center">
+        {% for tier in tiers %}
+        <li>
+          <h4 style="margin-top: 1rem">
+            Tier '{{ tier.name }}' {% if tier.name|lower == profile.tier|lower
+            %}
+            <span style="color: darkred">- Your level</span>
+          </h4>
+
+          <ul style="list-style: none; padding-left: 0; text-align: center">
+            {% for mini in profile.tier.mini_size.all %}
+            <li>Mini Size: {{ mini.width }}x{{ mini.height }}</li>
+            {% endfor %}
+          </ul>
+
+          {% if tier.presence_link_to_org_file %}
+          <p>Orginal image</p>
+          {% endif %} {% if tier.ability_to_generate_expiring_links %}
+          <p>Generate expiring link</p>
+          {% endif %} {% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h3>Your Gallery:</h3>
+
+    <div
+      class="d-flex justify-content-center row row-cols-4 row-cols-lg-5 g-4 g-lg-3 m-4"
+      style="margin: auto"
+    >
+      {% for img in img_sended_by_user %}
+      <div class="col">
+        <div class="card shadow p-3 mb-5 bg-body rounded">
+          <a href="{% url 'imageapp:single-img' img.id %}">
+            <img
+              style="
+                width: 9rem;
+                height: 9rem;
+                border-radius: 0.3rem;
+                object-fit: cover;
+                object-position: center;
+              "
+              class="card-img-top"
+              src="{{ img.image_file.url }}"
+              alt="Image {{ img.title }} {{ img.short_description }}"
+            />
+          </a>
+
+          <h5 class="card-title m-1">{{ img.title }}</h5>
+
+          {% if img.short_description %}
+          <p class="card-text">Desc: {{ img.short_description}}</p>
+          {% endif %} {% if img.private %}
+          <p class="card-text">Private picture</p>
+          {% else %}
+          <p class="card-text">Public picture</p>
+          {% endif %}
+
+          <div class="card-body">
+            <ul style="list-style: none; padding-left: 0; text-align: center">
+              Available thumbnail sizes: {% for mini in
+              profile.tier.mini_size.all %}
+              <li>
+                <a
+                  class="btn btn-primary m-1"
+                  target="_blank"
+                  href="{% url 'imageapp:generate-thumbnail' img.id mini.width mini.height %}"
+                >
+                  {{ mini.width }}x{{ mini.height }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+
+            {% if profile.tier.presence_link_to_org_file %}
+            <a
+              style="margin: 0.5rem"
+              class="btn btn-primary"
+              target="_blank"
+              href="{{ img.image_file.url }}"
+              >Orginal img</a
+            >
+            {% endif %}
+            <br />
+            {% if profile.tier.ability_to_generate_expiring_links %}
+            <a
+              href="{% url 'imageapp:generate-expiring-link' img.id 340 %}"
+              class="btn btn-primary"
+              target="_blank"
+              >Generate exp link!</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</article>
+
+{% endblock %}
