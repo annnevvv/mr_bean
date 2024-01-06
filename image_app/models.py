@@ -7,7 +7,7 @@ def user_uploaded_image_path(instance, filename):
     return f'users/{instance.user.id}/uploaded_img/{filename}'
 
 
-class ImageModel(models.Model):
+class Image(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     image_file = models.ImageField(upload_to=user_uploaded_image_path,
@@ -21,9 +21,9 @@ class ImageModel(models.Model):
         return self.title
 
 
-class ImageCommentModel(models.Model):
+class ImageComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    img = models.ForeignKey(ImageModel, on_delete=models.CASCADE)
+    img = models.ForeignKey(Image, on_delete=models.CASCADE)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     text = models.TextField(validators=[
@@ -31,10 +31,11 @@ class ImageCommentModel(models.Model):
             limit_value=30, message="The text must contain at least 30 characters."),
         MaxValueValidator(
             limit_value=3000, message="The text cannot exceed 3000 characters."),
-    ])
+    ]
+    )
 
 
-class MiniatureSizeModel(models.Model):
+class MiniatureSize(models.Model):
     height = models.PositiveIntegerField()
     width = models.PositiveIntegerField()
 
@@ -42,11 +43,11 @@ class MiniatureSizeModel(models.Model):
         return f'{self.height}x{self.width}'
 
 
-class ExpiringLinkModel(models.Model):
+class ExpiringLink(models.Model):
     name = models.CharField(max_length=30, unique=True, null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     expiration = models.PositiveIntegerField(
         validators=[MinValueValidator(300), MaxValueValidator(3000)],
         default=3000)
-    img = models.OneToOneField(ImageModel, on_delete=models.CASCADE,
+    img = models.OneToOneField(Image, on_delete=models.CASCADE,
                                null=True, blank=True)

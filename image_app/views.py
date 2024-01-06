@@ -9,7 +9,7 @@ from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
 from .forms import ImageForm, ExpiringLinkForm
-from .models import ImageModel, ImageCommentModel, ExpiringLinkModel
+from .models import Image, ImageComment, ExpiringLink
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -32,19 +32,19 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
     template_name = 'imageapp/generate_exp_link.html'
 
     def get(self, request, image_id, th_time=310):
-        image = ImageModel.objects.get(pk=image_id)
+        image = Image.objects.get(pk=image_id)
         form = ExpiringLinkForm()
 
         try:
-            link = ExpiringLinkModel.objects.get(img=image)
+            link = ExpiringLink.objects.get(img=image)
             return render(request, self.template_name,
                           {'image': image, 'form': form, 'links': link})
-        except ExpiringLinkModel.DoesNotExist:
+        except ExpiringLink.DoesNotExist:
             return render(request, self.template_name,
                           {'image': image, 'form': form, 'links': False})
 
     def post(self, request, image_id, th_time=310):
-        image = ImageModel.objects.get(pk=image_id)
+        image = Image.objects.get(pk=image_id)
         form = ExpiringLinkForm(
             request.POST)
 
@@ -56,11 +56,11 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
                 link.save()
 
                 try:
-                    link = ExpiringLinkModel.objects.get(img=image)
+                    link = ExpiringLink.objects.get(img=image)
                     return render(request, self.template_name,
                                   {'image': image, 'form': form,
                                    'links': link})
-                except ExpiringLinkModel.DoesNotExist:
+                except ExpiringLink.DoesNotExist:
                     return render(request, self.template_name,
                                   {'image': image, 'form': form,
                                    'links': False})
@@ -75,12 +75,12 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
             try:
                 lin = request.POST.get('delete_links')
-                link = ExpiringLinkModel.objects.get(name=lin)
+                link = ExpiringLink.objects.get(name=lin)
                 link.delete()
 
                 return render(request, self.template_name,
                               {'image': image, 'form': form, 'links': False})
-            except ExpiringLinkModel.DoesNotExist:
+            except ExpiringLink.DoesNotExist:
                 return render(request, self.template_name,
                               {'image': image, 'form': form, 'links': False})
 
@@ -89,10 +89,10 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
 
 class ImageModelViewSet(ModelViewSet):
-    queryset = ImageModel.objects.all()
+    queryset = Image.objects.all()
     serializer_class = ImageModelSerializer
 
 
 class ImageCommenModelViewSet(ModelViewSet):
-    queryset = ImageCommentModel.objects.all()
+    queryset = ImageComment.objects.all()
     serializer_class = ImageCommentModelSerializer

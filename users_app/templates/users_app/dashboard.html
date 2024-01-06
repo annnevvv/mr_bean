@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% load static %} {% load customtags %} {% block
-content %}
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
 <style>
   style="list-style: none;
   padding-left: 0;
@@ -10,30 +10,6 @@ content %}
   <h1 style="margin: 2rem">Your account - Welcome @{{ user }} !</h1>
   <h2></h2>
   <section class="d-flex justify-content-center">
-    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
-      <a
-        class="card-img-top"
-        href="{{ profile.avatar }}"
-        target="_blank"
-        style="
-          margin: auto;
-          width: 150px;
-          height: 150px;
-          border-radius: 50%;
-          overflow: hidden;
-        "
-      >
-        <img src="{{ profile.avatar.url }}" />
-      </a>
-      <h3>Your data:</h3>
-      <ol style="list-style: none; padding-left: 0; text-align: center">
-        <li>Credit: {{ profile.points }}</li>
-        <li>Score: {% user_comment_counter user %}</li>
-        <li>Uploaded pictue: {% total_img user %}</li>
-        <li>Published pictue: {% public_img_counter user %}</li>
-      </ol>
-    </div>
-
     <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
       <a
         class="card-img-top"
@@ -49,117 +25,95 @@ content %}
       >
         <img src="{% static 'images/MrBeanYT.png' %}" />
       </a>
-
       <div class="card-body">
         <h2>Links to:</h2>
         <lu style="list-style: none; padding-left: 0; text-align: center">
           <li>
-            <a href="{% url 'imageapp:form-send-img' %} " target="_blank">
+            <a href="{% url 'image_app:form-upload-img' %} " target="_blank">
               Add new picture </a
             >- Upload form
-          </li>
-          <li>
-            <a
-              href="{% url 'imageapp:sended-img-user-list-API' %} "
-              target="_blank"
-              >Images sended by you</a
-            >- API view
-          </li>
-          <li>
-            <a href="{% url 'imageapp:sended-img-list_API' %} " target="_blank"
-              >All sended images</a
-            >- API view
-          </li>
-          <li>
-            <a href="{% url 'imageapp:all-public-img' %} " target="_blank"
-              >All public images</a
-            >
-            - Gallery View
           </li>
         </lu>
       </div>
     </div>
-
     <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
       <h3>Avidable membership levels:</h3>
-      <ol style="list-style: none; padding-left: 0; text-align: center">
-        {% for tier in tiers %}
+      <ul style="list-style: none; padding-left: 0; text-align: center">
+        {% for index, tier_info in tiers_with_miniature_sizes %}
         <li>
           <h4 style="margin-top: 1rem">
-            Tier '{{ tier.name }}' {% if tier.name|lower == profile.tier|lower
-            %}
+            Tier {{ index }}. {{ tier_info.tier.name }} {% if user in
+            tier_info.tier_users %}
             <span style="color: darkred">- Your level</span>
           </h4>
 
+          {% if user in tier_info.tier_users %}
           <ul style="list-style: none; padding-left: 0; text-align: center">
-            {% for mini in profile.tier.mini_size.all %}
-            <li>Mini Size: {{ mini.width }}x{{ mini.height }}</li>
+            {% for miniature_size in tier_info.miniature_sizes %}
+            <li>
+              Mini Size: {{ miniature_size.width }}x{{ miniature_size.height }}
+            </li>
             {% endfor %}
           </ul>
 
-          {% if tier.presence_link_to_org_file %}
+          {% if tier_info.original_img%}
           <p>Orginal image</p>
-          {% endif %} {% if tier.ability_to_generate_expiring_links %}
+          {% endif %} {% if tier_info.generate_exp_link%}
           <p>Generate expiring link</p>
           {% endif %} {% endif %}
         </li>
         {% endfor %}
-      </ol>
+      </ul>
     </div>
   </section>
 
   <section>
     <h3>Your Gallery:</h3>
 
+    <p>(You have {% total_img user %} images in.)</p>
+
+    {% for index, tier_info in tiers_with_miniature_sizes %} {% if user in
+    tier_info.tier_users %}
     <div
-      class="d-flex justify-content-center row row-cols-4 row-cols-lg-5 g-4 g-lg-3 m-4"
+      class="d-flex justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3"
       style="margin: auto"
     >
       {% for img in img_sended_by_user %}
       <div class="col">
         <div class="card shadow p-3 mb-5 bg-body rounded">
-          <a href="{% url 'imageapp:single-img' img.id %}">
-            <img
-              style="
-                width: 9rem;
-                height: 9rem;
-                border-radius: 0.3rem;
-                object-fit: cover;
-                object-position: center;
-              "
-              class="card-img-top"
-              src="{{ img.image_file.url }}"
-              alt="Image {{ img.title }} {{ img.short_description }}"
-            />
-          </a>
-
+          <img
+            style="
+              margin: auto;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              overflow: hidden;
+            "
+            class="card-img-top"
+            src="{{ img.image_file.url }}"
+            alt="Image {{ img.title }} {{ img.short_description }}"
+          />
           <h5 class="card-title m-1">{{ img.title }}</h5>
-
           {% if img.short_description %}
           <p class="card-text">Desc: {{ img.short_description}}</p>
-          {% endif %} {% if img.private %}
-          <p class="card-text">Private picture</p>
-          {% else %}
-          <p class="card-text">Public picture</p>
           {% endif %}
-
           <div class="card-body">
             <ul style="list-style: none; padding-left: 0; text-align: center">
-              Available thumbnail sizes: {% for mini in
-              profile.tier.mini_size.all %}
+              Available Image thumbnail sizes: {% for miniature_size in
+              tier_info.miniature_sizes %}
               <li>
                 <a
                   class="btn btn-primary m-1"
                   target="_blank"
-                  href="{% url 'imageapp:generate-thumbnail' img.id mini.width mini.height %}"
+                  href="{% url 'image_app:generate-thumbnail' img.id miniature_size.width miniature_size.height %}"
                 >
-                  {{ mini.width }}x{{ mini.height }}
+                  {{ miniature_size.width }}x{{ miniature_size.height }}
                 </a>
               </li>
               {% endfor %}
             </ul>
 
-            {% if profile.tier.presence_link_to_org_file %}
+            {% if tier_info.original_img%}
             <a
               style="margin: 0.5rem"
               class="btn btn-primary"
@@ -167,11 +121,9 @@ content %}
               href="{{ img.image_file.url }}"
               >Orginal img</a
             >
-            {% endif %}
-            <br />
-            {% if profile.tier.ability_to_generate_expiring_links %}
+            {% endif %} {% if tier_info.generate_exp_link%}
             <a
-              href="{% url 'imageapp:generate-expiring-link' img.id 340 %}"
+              href="{% url 'image_app:generate-expiring-link' img.id 340 %}"
               class="btn btn-primary"
               target="_blank"
               >Generate exp link!</a

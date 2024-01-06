@@ -42,8 +42,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
+    'api_app',
     'image_app',
-    # 'api_app',
     'users_app'
 ]
 
@@ -147,3 +147,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MEDIA_ROOT = BASE_DIR / "uploads"
+MEDIA_URL = "/files/"
+
+LOGIN_REDIRECT_URL = '/users_app/dashboard'
+# LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = ''

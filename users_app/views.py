@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
-from image_app.models import ImageModel
+from image_app.models import Image
 
 from .models import UserAccountTier, UserProfileModel
 
@@ -29,14 +29,14 @@ class SignupView(CreateView):
 
 
 class UserDasboard(LoginRequiredMixin, View):
-    template_name = 'users/dashboard.html'
+    template_name = 'users_app/dashboard.html'
     paginate_by = 24
 
     def get(self, request):
         tiers = UserAccountTier.objects.all()
         user = request.user
         profile = UserProfileModel.objects.get(user=user)
-        img_sended_by_user = ImageModel.objects.filter(
+        img_sended_by_user = Image.objects.filter(
             user=user.id).order_by('-uploaded_at')
 
         context = {
