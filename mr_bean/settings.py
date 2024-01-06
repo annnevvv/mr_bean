@@ -150,7 +150,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 MEDIA_ROOT = BASE_DIR / "uploads"
-MEDIA_URL = "/"
+MEDIA_URL = "/media/"
+# MEDIA_URL = "/"
 # MEDIA_URL = "/files/" # to było wcześńiej !
 
 LOGIN_REDIRECT_URL = '/users_app/dashboard'

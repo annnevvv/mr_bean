@@ -4,6 +4,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
@@ -15,7 +16,7 @@ from .models import Image, ImageComment, ExpiringLink
 class ImageFormView(LoginRequiredMixin, FormView):
     template_name = 'image_app/form_upload_img.html'
     form_class = ImageForm
-    success_url = 'form_send_img_success'
+    success_url = reverse_lazy('image_app:success')
 
     def form_valid(self, form):
         sended_image = form.save(commit=False)
@@ -25,11 +26,11 @@ class ImageFormView(LoginRequiredMixin, FormView):
 
 
 class SuccessView(TemplateView):
-    template_name = 'templates/success.html'
+    template_name = 'success.html'
 
 
 class GenerateExpiringLinkView(LoginRequiredMixin, View):
-    template_name = 'imageapp/generate_exp_link.html'
+    template_name = 'image_app/generate_exp_link.html'
 
     def get(self, request, image_id, th_time=310):
         image = Image.objects.get(pk=image_id)

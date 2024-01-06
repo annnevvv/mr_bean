@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block content %}
+<div style="margin: auto; max-width: 50%">
+  <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+    <form method="post" enctype="multipart/form-data">
+      {{ form.as_p }} {% csrf_token %}
+      <input class="btn btn-danger" type="submit" value="Load image" />
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
