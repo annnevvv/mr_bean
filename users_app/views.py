@@ -10,7 +10,7 @@ from django.contrib.auth import login
 
 from image_app.models import Image
 
-from .models import UserAccountTier, UserProfileModel
+from .models import UserAccountTier, UserProfile
 
 
 # Create your views here.
@@ -35,14 +35,14 @@ class UserDasboard(LoginRequiredMixin, View):
     def get(self, request):
         tiers = UserAccountTier.objects.all()
         user = request.user
-        profile = UserProfileModel.objects.get(user=user)
+        user_profile = UserProfile.objects.get(user=user)
         img_sended_by_user = Image.objects.filter(
             user=user.id).order_by('-uploaded_at')
 
         context = {
             'tiers': tiers,
             'user': user,
-            'profile': profile,
+            'user_profile': user_profile,
             'img_sended_by_user': img_sended_by_user,
         }
         return render(request, self.template_name, context)
@@ -57,5 +57,5 @@ class UserAccountTierViewSet(ModelViewSet):
 
 
 class UserProfileModelViewSet(ModelViewSet):
-    queryset = UserProfileModel.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserProfileModelSerializer

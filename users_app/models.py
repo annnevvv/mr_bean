@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
 
 from image_app.models import MiniatureSize
 
@@ -19,10 +21,11 @@ class UserAccountTier(models.Model):
 
 
 def user_avatar_image_path(instance, filename):
-    return f'users/{instance.user.id}/avatar/{filename}'
+
+    return f'users/{instance.user.id}/avatar_{instance.user.id}{filename[-4:]}'
 
 
-class UserProfileModel(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tier = models.ForeignKey(UserAccountTier,
                              on_delete=models.CASCADE,
@@ -38,12 +41,12 @@ class UserProfileModel(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfileModel.objects.create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofilemodel.save()
+    instance.userprofile.save()
 
 
 # admn_user = User.objects.get(username='admn')

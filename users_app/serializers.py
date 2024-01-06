@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from .models import UserAccountTier, UserProfileModel
+from .models import UserAccountTier, UserProfile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileModelSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = UserProfileModel
+        model = UserProfile
         fields = '__all__'
 
 

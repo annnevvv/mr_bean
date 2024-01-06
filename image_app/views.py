@@ -13,7 +13,7 @@ from .models import Image, ImageComment, ExpiringLink
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
-    template_name = 'imageapp/form_upload_img.html'
+    template_name = 'image_app/form_upload_img.html'
     form_class = ImageForm
     success_url = 'form_send_img_success'
 

@@ -23,8 +23,9 @@
           overflow: hidden;
         "
       >
-        <img src="{% static 'images/MrBeanYT.png' %}" />
+        <img src="{{ user_profile.avatar.url }}" />
       </a>
+
       <div class="card-body">
         <h2>Links to:</h2>
         <lu style="list-style: none; padding-left: 0; text-align: center">
@@ -38,16 +39,38 @@
     </div>
     <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
       <h3>Avidable membership levels:</h3>
+
       <ul style="list-style: none; padding-left: 0; text-align: center">
-        {% for index, tier_info in tiers_with_miniature_sizes %}
+        {% for tier in tiers %}
+        <li>
+          <p>Tier: {{tier}}</p>
+          {% if user_profile.tier == tier %}
+          <h4 style="margin-top: 1rem">
+            <span style="color: darkred">- Your level</span>
+          </h4>
+          {% if tier == user_profile.tier %}
+          <ul>
+            <li>Miniatury: {{tier.mini_size}}</li>
+            <li>Orginal image link: {{tier.presence_link_to_org_file}}</li>
+            <li>
+              Generate expiring link:
+              {{tier.ability_to_generate_expiring_links}}
+            </li>
+          </ul>
+          {% endif %} {% endif %} {% endfor %}
+        </li>
+      </ul>
+
+      <ul style="list-style: none; padding-left: 0; text-align: center">
+        {% for index, tiers in tiers_with_miniature_sizes %}
         <li>
           <h4 style="margin-top: 1rem">
-            Tier {{ index }}. {{ tier_info.tier.name }} {% if user in
-            tier_info.tier_users %}
+            Tier {{ index }}. {{ tiers.tier.name }} {% if user in
+            tiers.tier_users %}
             <span style="color: darkred">- Your level</span>
           </h4>
 
-          {% if user in tier_info.tier_users %}
+          {% if user in tiers.tier_users %}
           <ul style="list-style: none; padding-left: 0; text-align: center">
             {% for miniature_size in tier_info.miniature_sizes %}
             <li>
