@@ -1,11 +1,15 @@
+
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .serializers import ImageModelSerializer, ImageCommentModelSerializer
+from rest_framework.viewsets import ModelViewSet
+
 from .forms import ImageForm, ExpiringLinkForm
-from .models import ImageModel, ExpiringLinkModel
+from .models import ImageModel, ImageCommentModel, ExpiringLinkModel
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -79,3 +83,16 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
             except ExpiringLinkModel.DoesNotExist:
                 return render(request, self.template_name,
                               {'image': image, 'form': form, 'links': False})
+
+
+# API ViewSets
+
+
+class ImageModelViewSet(ModelViewSet):
+    queryset = ImageModel.objects.all()
+    serializer_class = ImageModelSerializer
+
+
+class ImageCommenModelViewSet(ModelViewSet):
+    queryset = ImageCommentModel.objects.all()
+    serializer_class = ImageCommentModelSerializer

@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users_app.urls', 'users_app')),
     path('images/', include('image_app.urls', 'images_app')),
-    # path('api/', include('image_app.urls', 'api_app'))
+    path('api/', include('api_app.urls', 'api_app'))
     # path('api/', include(router.urls), name='api'),
 ]
 if settings.DEBUG:

@@ -26,7 +26,12 @@ class ImageCommentModel(models.Model):
     img = models.ForeignKey(ImageModel, on_delete=models.CASCADE)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    txt = models.TextField([MinValueValidator(30), MaxValueValidator(3000)])
+    text = models.TextField(validators=[
+        MinValueValidator(
+            limit_value=30, message="The text must contain at least 30 characters."),
+        MaxValueValidator(
+            limit_value=3000, message="The text cannot exceed 3000 characters."),
+    ])
 
 
 class MiniatureSizeModel(models.Model):

@@ -11,13 +11,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'groups', 'date_joined']
 
 
-class UserAccountTierSerializer(serializers.ModelSerializer):
+class UserProfileModelSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = UserAccountTier
+        model = UserProfileModel
         fields = '__all__'
 
 
-class UserProfileModelSerializer(serializers.ModelSerializer):
+class UserAccountTierSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = UserProfileModel
+        model = UserAccountTier
         fields = '__all__'

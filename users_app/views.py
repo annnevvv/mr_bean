@@ -1,3 +1,5 @@
+from .serializers import UserAccountTierSerializer, UserProfileModelSerializer
+from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -44,3 +46,16 @@ class UserDasboard(LoginRequiredMixin, View):
             'img_sended_by_user': img_sended_by_user,
         }
         return render(request, self.template_name, context)
+
+
+# API ViewSets
+
+
+class UserAccountTierViewSet(ModelViewSet):
+    queryset = UserAccountTier.objects.all()
+    serializer_class = UserAccountTierSerializer
+
+
+class UserProfileModelViewSet(ModelViewSet):
+    queryset = UserProfileModel.objects.all()
+    serializer_class = UserProfileModelSerializer
