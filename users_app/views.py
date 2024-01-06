@@ -36,8 +36,13 @@ class UserDasboard(LoginRequiredMixin, View):
         tiers = UserAccountTier.objects.all()
         user = request.user
         user_profile = UserProfile.objects.get(user=user)
+
+        print(f"user_profile: {user_profile}")
+
         img_sended_by_user = Image.objects.filter(
             user=user.id).order_by('-uploaded_at')
+
+        print(f"user_profile_mini: {img_sended_by_user}")
 
         context = {
             'tiers': tiers,

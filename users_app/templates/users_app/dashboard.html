@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
 {% endcomment %} {% block content %}
+
 <style>
   style="list-style: none;
   padding-left: 0;
@@ -60,33 +61,6 @@
           {% endif %} {% endif %} {% endfor %}
         </li>
       </ul>
-
-      <ul style="list-style: none; padding-left: 0; text-align: center">
-        {% for index, tiers in tiers_with_miniature_sizes %}
-        <li>
-          <h4 style="margin-top: 1rem">
-            Tier {{ index }}. {{ tiers.tier.name }} {% if user in
-            tiers.tier_users %}
-            <span style="color: darkred">- Your level</span>
-          </h4>
-
-          {% if user in tiers.tier_users %}
-          <ul style="list-style: none; padding-left: 0; text-align: center">
-            {% for miniature_size in tier_info.miniature_sizes %}
-            <li>
-              Mini Size: {{ miniature_size.width }}x{{ miniature_size.height }}
-            </li>
-            {% endfor %}
-          </ul>
-
-          {% if tier_info.original_img%}
-          <p>Orginal image</p>
-          {% endif %} {% if tier_info.generate_exp_link%}
-          <p>Generate expiring link</p>
-          {% endif %} {% endif %}
-        </li>
-        {% endfor %}
-      </ul>
     </div>
   </section>
 
@@ -95,67 +69,52 @@
 
     <p>(You have {% total_img user %} images in.)</p>
 
-    {% for index, tier_info in tiers_with_miniature_sizes %} {% if user in
-    tier_info.tier_users %}
-    <div
-      class="d-flex justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3"
-      style="margin: auto"
-    >
-      {% for img in img_sended_by_user %}
-      <div class="col">
-        <div class="card shadow p-3 mb-5 bg-body rounded">
-          <img
-            style="
-              margin: auto;
-              width: 100px;
-              height: 100px;
-              border-radius: 50%;
-              overflow: hidden;
-            "
-            class="card-img-top"
-            src="{{ img.image_file.url }}"
-            alt="Image {{ img.title }} {{ img.short_description }}"
-          />
-          <h5 class="card-title m-1">{{ img.title }}</h5>
-          {% if img.short_description %}
-          <p class="card-text">Desc: {{ img.short_description}}</p>
-          {% endif %}
-          <div class="card-body">
-            <ul style="list-style: none; padding-left: 0; text-align: center">
-              Available Image thumbnail sizes: {% for miniature_size in
-              tier_info.miniature_sizes %}
-              <li>
-                <a
-                  class="btn btn-primary m-1"
-                  target="_blank"
-                  href="{% url 'image_app:generate-thumbnail' img.id miniature_size.width miniature_size.height %}"
-                >
-                  {{ miniature_size.width }}x{{ miniature_size.height }}
-                </a>
-              </li>
-              {% endfor %}
-            </ul>
+    <div class="container">
+      <div class="d-flex flex-wrap">
+        {% for img in img_sended_by_user %}
+        <div class="col">
+          <div class="card shadow mb-5 bg-body rounded" style="width: 17rem">
+            <img
+              class="card-img-top"
+              src="{{img.image_file.url}}"
+              alt="Card image cap"
+            />
+            <h5 class="card-title">{{ img.title }}</h5>
+            <p class="card-text">{{ img.published_at }}</p>
+            <p class="card-text">{{ img.short_description }}</p>
+            <ul class="list-group list-group-flush">
+              {% for tier in tiers %}
+              <a />
+              {% if tier == user_profile.tier %}
+              <a />
+              {%for mini in tier.mini_size.all%}
 
-            {% if tier_info.original_img%}
-            <a
-              style="margin: 0.5rem"
-              class="btn btn-primary"
-              target="_blank"
-              href="{{ img.image_file.url }}"
-              >Orginal img</a
-            >
-            {% endif %} {% if tier_info.generate_exp_link%}
-            <a
-              href="{% url 'image_app:generate-expiring-link' img.id 340 %}"
-              class="btn btn-primary"
-              target="_blank"
-              >Generate exp link!</a
-            >
-            {% endif %}
+              <a href="#" class="btn btn-primary m-1"
+                >{{mini.height}}x{{mini.width}}</a
+              >
+
+              {% endfor %}
+              <a />
+              {% if tier.presence_link_to_org_file %}
+              <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+              {% endif %}
+              <a />
+              {% if tier.ability_to_generate_expiring_links %}
+              <a href="#" class="btn btn-primary m-1">Temporary Link</a>
+              {% endif %}
+              <a />
+              {% endif %}
+              <a />
+              {% endfor %}
+              <div class="col">
+                <a href="#" class="btn btn-danger m-1">EDIT</a>
+                <a href="#" class="btn btn-danger m-1">DELETE</a>
+              </div>
+            </ul>
           </div>
         </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </section>
 </article>
