@@ -15,6 +15,7 @@ class UserAccountTier(models.Model):
     mini_size = models.ManyToManyField(MiniatureSize, null=True)
     presence_link_to_org_file = models.BooleanField(default=0)
     ability_to_generate_expiring_links = models.BooleanField(default=0)
+    ability_to_generate_custom_size_mini = models.BooleanField(default=0)
 
     def __str__(self):
         return self.name

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
     'api_app',
     'image_app',
-    'users_app'
+    'users_app',
 ]
 
 

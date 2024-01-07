@@ -1,20 +1,25 @@
 
-from django.shortcuts import render
+from io import BytesIO
+from django import forms
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView, DeleteView
 
 from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
 from .forms import ImageForm, ExpiringLinkForm
 from .models import Image, ImageComment, ExpiringLink
+from users_app.models import UserAccountTier, UserProfile
 
 
-from datetime import timedelta
+from datetime import timedelta, timezone
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -31,6 +36,59 @@ class ImageFormView(LoginRequiredMixin, FormView):
 
 class SuccessView(TemplateView):
     template_name = 'success.html'
+
+
+class ImageDetailView(DetailView):
+    model = Image
+    template_name = 'image_app/image_detail.html'
+    context_object_name = 'image_instance'
+    pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        image_comments = ImageComment.objects.filter(img=self.object)
+        tiers = UserAccountTier.objects.all()
+        user_profile = UserProfile.objects.get(user=self.request.user.id)
+
+        context['image_comments'] = image_comments
+        context['tiers'] = tiers
+        context['user_profile'] = user_profile
+        return context
+
+
+class ImageUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = "__all__"
+
+
+class ImageUpdateView(UpdateView):
+    model = Image
+    template_name = 'image_app/image_update.html'
+    form_class = ImageUpdateForm
+    success_url = reverse_lazy('image_app:success')
+
+    # def get_success_url(self):
+    #     return reverse_lazy('success')
+
+    # def get_success_url(self):
+    #     return reverse_lazy('image_detail', kwargs={'pk': self.object.pk})
+
+
+class ImageDeleteView(DeleteView):
+    model = Image
+    template_name = 'image_app/image_delete.html'
+    success_url = reverse_lazy('image_app:success')
+
+
+# class ImageMixin:
+#     model = Image
+#     template_name = 'image_app/image_update_delete.html'
+#     form_class = ImageUpdateForm
+
+#     def get_success_url(self):
+#         return reverse_lazy('image_detail', kwargs={'pk': self.object.pk})
 
 
 class GenerateExpiringLinkView(LoginRequiredMixin, View):
@@ -92,7 +150,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
 @login_required
 def generate_thumbnail(request, image_id, th_width, th_height):
-    image = SendedImage.objects.get(pk=image_id)
+    image = Image.objects.get(pk=image_id)
 
     if image.image_file.name.lower().endswith(('.jpg', '.jpeg', '.png')):
         img = Image.open(image.image_file.path)
@@ -129,7 +187,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
     template_name = 'image_app/generate-exp-link.html'
 
     def get(self, request, image_id, th_time=310):
-        image = SendedImage.objects.get(pk=image_id)
+        image = Image.objects.get(pk=image_id)
         form = ExpiringLinkForm()
 
         try:
@@ -141,7 +199,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
                           {'image': image, 'form': form, 'links': False})
 
     def post(self, request, image_id, th_time=310):
-        image = SendedImage.objects.get(pk=image_id)
+        image = Image.objects.get(pk=image_id)
         form = ExpiringLinkForm(
             request.POST)  # request.POSt - for make work form in adding links
 
@@ -183,7 +241,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
 
 def show_generate_thumbnail(request, image_id, link_name):
-    image = SendedImage.objects.get(pk=image_id)
+    image = Image.objects.get(pk=image_id)
     link = ExpiringLink.objects.get(name=link_name)
 
     current_time = timezone.now()

@@ -39,26 +39,49 @@
       </div>
     </div>
     <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
-      <h3>Avidable membership levels:</h3>
+      <h3>Avidable membership plans:</h3>
 
       <ul style="list-style: none; padding-left: 0; text-align: center">
         {% for tier in tiers %}
-        <li>
-          <p>Tier: {{tier}}</p>
-          {% if user_profile.tier == tier %}
-          <h4 style="margin-top: 1rem">
-            <span style="color: darkred">- Your level</span>
-          </h4>
+        <li class="list-group-item">
+          <h5>{{tier}}  <span style="color: darkred;"><b> {% if user_profile.tier == tier %} - Your subscription{% endif %}</b> </span></h5>
+
+      
           {% if tier == user_profile.tier %}
-          <ul>
-            <li>Miniatury: {{tier.mini_size}}</li>
-            <li>Orginal image link: {{tier.presence_link_to_org_file}}</li>
-            <li>
-              Generate expiring link:
-              {{tier.ability_to_generate_expiring_links}}
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Avidable Thumbnail sizes:</li>
+
+                {% for mini in tier.mini_size.all %}
+                <li class="list-group-item m-0 p-0" style="scale: 88%; ">{{mini.height}}x{{mini.width}}</li>
+                {% endfor %}
+
+              </ul class="list-group list-group-flush">
+            </li>            
+            
+            {% if tier.ability_to_generate_expiring_links%}
+            <li class="list-group-item">
+              Ability to generate custom size thumbnail
             </li>
+            {% endif %}  
+
+
+            {% if tier.presence_link_to_org_file %}
+            <li class="list-group-item">
+              Ability to generate link to orginal image
+            </li>
+            {% endif %}
+
+            {% if tier.ability_to_generate_expiring_links %}
+            <li class="list-group-item">
+              Ability to generate expiring link              
+            </li>
+            {% endif %}
+
           </ul>
-          {% endif %} {% endif %} {% endfor %}
+          {% endif %} {% endfor %}
         </li>
       </ul>
     </div>
@@ -70,45 +93,51 @@
     <p>(You have {% total_img user %} images in.)</p>
 
     <div class="container">
-      <div class="d-flex flex-wrap">
+      <div class="d-flex flex-wrap justify-content-center ">
         {% for img in img_sended_by_user %}
         <div class="col">
           <div class="card shadow mb-5 bg-body rounded" style="width: 17rem">
-            <img
-              class="card-img-top"
-              src="{{img.image_file.url}}"
-              alt="Card image cap"
-            />
-            <h5 class="card-title">{{ img.title }}</h5>
-            <p class="card-text">{{ img.published_at }}</p>
-            <p class="card-text">{{ img.short_description }}</p>
-            <ul class="list-group list-group-flush">
-              {% for tier in tiers %}
-              <a />
-              {% if tier == user_profile.tier %}
-              <a />
-              {%for mini in tier.mini_size.all%}
+            <a href="{% url 'image_app:image_detail' pk=img.id %}"
+              ><img
+                class="card-img-top"
+                src="{{img.image_file.url}}"
+                alt="Card image cap"
+            /></a>
 
-              <a href="#" class="btn btn-primary m-1"
-                >{{mini.height}}x{{mini.width}}</a
-              >
+            <div class="card-body">
+              <h5 class="card-title">{{ img.title }}</h5>
+              <p class="card-text">{{ img.published_at }}</p>
+              <p class="card-text">{{ img.short_description|truncatewords:17 }}</p>
+              <ul class="list-group list-group-flush">
+                {% for tier in tiers %}
+                <a />
+                {% if tier == user_profile.tier %}
+                <a />
+                {%for mini in tier.mini_size.all%}
 
-              {% endfor %}
-              <a />
-              {% if tier.presence_link_to_org_file %}
-              <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
-              {% endif %}
-              <a />
-              {% if tier.ability_to_generate_expiring_links %}
-              <a href="#" class="btn btn-primary m-1">Temporary Link</a>
-              {% endif %}
-              <a />
-              {% endif %}
-              <a />
-              {% endfor %}
-              <div class="col">
-                <a href="#" class="btn btn-danger m-1">EDIT</a>
-                <a href="#" class="btn btn-danger m-1">DELETE</a>
+                <a href="#" class="btn btn-primary m-1"
+                  >{{mini.height}}x{{mini.width}}</a
+                >
+
+                {% endfor %}
+                <a />
+                {% if tier.presence_link_to_org_file %}
+                <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+                {% endif %}
+                <a />
+
+                {% if tier.ability_to_generate_expiring_links %}
+                <a href="#" class="btn btn-primary m-1">Temporary Link</a>
+                {% endif %}
+                <a />
+
+                {% endif %}
+                <a />
+                {% endfor %}
+                <div class="col">
+                  <a href="#" class="btn btn-danger m-1">EDIT</a>
+                  <a href="#" class="btn btn-danger m-1">DELETE</a>
+                </div>
               </div>
             </ul>
           </div>

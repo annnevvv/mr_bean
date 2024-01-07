@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MinLengthValidator, MaxValueValidator, MaxLengthValidator
 
 
 def user_uploaded_image_path(instance, filename):
@@ -27,9 +27,9 @@ class ImageComment(models.Model):
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     text = models.TextField(validators=[
-        MinValueValidator(
+        MinLengthValidator(
             limit_value=30, message="The text must contain at least 30 characters."),
-        MaxValueValidator(
+        MaxLengthValidator(
             limit_value=3000, message="The text cannot exceed 3000 characters."),
     ]
     )
