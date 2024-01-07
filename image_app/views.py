@@ -21,6 +21,15 @@ from users_app.models import UserAccountTier, UserProfile
 
 from datetime import timedelta, timezone
 
+# Create your views here.
+
+
+class HomeView(ListView):
+    model = Image
+    template_name = 'image_app/index.html'
+    context_object_name = 'image_list'
+    ordering = ['-uploaded_at']
+
 
 class ImageFormView(LoginRequiredMixin, FormView):
     template_name = 'image_app/form_upload_img.html'

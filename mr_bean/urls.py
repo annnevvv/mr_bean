@@ -21,14 +21,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from image_app.views import HomeView
 
 # router = routers.DefaultRouter()
 
 urlpatterns = [
+    path('', HomeView.as_view(), name='home'),
+    path('images', include('image_app.urls', 'images_app')),
     path('admin/', admin.site.urls),
     path('users/', include('users_app.urls', 'users_app')),
-    path('images/', include('image_app.urls', 'images_app')),
-    path('api/', include('api_app.urls', 'api_app'))
+    path('api/', include('api_app.urls', 'api_app')),
     # path('api/', include(router.urls), name='api'),
 ]
 if settings.DEBUG:

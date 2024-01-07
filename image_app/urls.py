@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ImageFormView, SuccessView, GenerateExpiringLinkView, generate_thumbnail, ImageDetailView, ImageUpdateView, ImageDeleteView
+from .views import HomeView, ImageFormView, SuccessView, GenerateExpiringLinkView, generate_thumbnail, ImageDetailView, ImageUpdateView, ImageDeleteView
 
 
 app_name = 'image_app'
@@ -24,6 +24,7 @@ urlpatterns = [
          GenerateExpiringLinkView.as_view()),
 
     # OTHER
+
     path('success', SuccessView.as_view(),
          name='success'),
 

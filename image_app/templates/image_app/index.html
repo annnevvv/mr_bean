@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
+
+<section class="contianer">
+  <div class="d-flex flex-wrap justify-content-center">
+    {% for img in image_list %}
+    <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem">
+      <a href="{% url 'image_app:image_detail' pk=img.id %}"
+        ><img
+          class="card-img-top"
+          src="{{img.image_file.url}}"
+          alt="Card image cap"
+      /></a>
+      <div class="card-body">
+        <h5 class="card-title">{{img.title}}</h5>
+        <div class="card-text">{{img.short_description|truncatewords:17}}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
