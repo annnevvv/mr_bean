@@ -22,6 +22,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>{% block title %}{% endblock title %}</title>
   </head>
 
@@ -36,13 +37,11 @@
     >
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-          {% comment %}
-          <a href="{% url 'users:dashboard' %}">
-            {% endcomment %}
+          <a href="{% url 'users_app:dashboard' %}">
             <img
-              style="max-height: 70px"
+              style="max-height: 4rem"
               class="logo"
-              src="{% static 'images/mr_Bean2.png' %}"
+              src="{% static 'images/logo3.jpg' %}"
             />
           </a>
           <a
@@ -72,12 +71,15 @@
 
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+              {% comment %}
               <li class="nav-item ps-lg-2">
                 <a class="nav-link" target="_blank">All img (API view)</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" target="_blank">Yours img (API view)</a>
               </li>
+              {% endcomment %}
+
               <li class="nav-item me-5 pe-lg-5 ps-lg-5">
                 <a
                   class="nav-link disabled pe-lg-5 ms-lg-5 me-lg-5"
@@ -124,6 +126,7 @@
                     overflow: hidden;
                   "
                 >
+                  {% if user_profile %}
                   <img
                     style="
                       width: 100%;
@@ -133,6 +136,7 @@
                     "
                     src="{{ user_profile.avatar.url }}"
                   />
+                  {% endif %}
                 </div>
               </li>
               {% else %}

@@ -3,28 +3,65 @@
 
 <section class="contianer">
   <div class="d-flex flex-wrap justify-content-center">
-    <div class="card shadow mb-5 bg-body rounded mt-3">
-      <h1 class="card-title p-3">mrBean project</h1>
+    <div class="card shadow mb-3 bg-body rounded mt-3">
+      <h1 class="card-title p-3"> Welcome to the 
+      <img src="{% static 'images/logo.png' %}" alt="logo" style="max-height: 4.4rem"/> 's best FANS website!</h1>
     </div>
   </div>
 </section>
 
-<section class="contianer">
-    <div class=""> 
+<section class="contianer dark bg-dark ">
+    <div class="row justify-content-center"> 
 
-    <div class="card-title">
-      <h1 class="card-title p-3">Subscription plans</h1> 
+    <div class="card m-2">
+      <h2 class="card-title text-center p-1" style="">Subscription plans</h2> 
     </div>
     
     
     <div class="d-flex flex-wrap justify-content-center">   
 
         {% for tier in tiers %}
-        <div class="card shadow mb-5 bg-body rounded mt-3 m-1" style="width: 17rem; height: 22rem;">        
-        <h1 class="card-title p-3">{{tier.name}}</h1>       
+        <div class="card shadow mb-1 bg-body rounded mt-1 m-1" style="width: 20rem; height: 31rem;">        
+          <h2 class="card-title p-3 text-center">{{tier.name}}</h2>  
+
+          {% if tier.mini_size %}
+          <h5 class="text-center">Generate thumbnails in sizes:</h5> 
+          <p><p/>
+          {% endif %}
+    
+
+          {% if tier.presence_link_to_org_file %}
+          <h5 class="text-center">Share your screenshots with your friends in the original size.</h5>
+          {% endif %}
+          <p><p/>
+
+          {% if tier.ability_to_generate_expiring_links %}
+          <h5 class="text-center">Generate expiring links for your posts.</h5>
+          {% endif %}
+          <p><p/>
+
+          {% if tier.ability_to_generate_custom_size_mini %}
+          <h5 class="text-center">Generate thumbnails in <span>custom</span> sizes</h5>           
+          {% endif %}
+
+          <div class="mt-auto text-center m-2">
+            <button class="btn btn-danger m-2">JOIN</button>  
+
+            {% if tier.price > 0 %}
+            <h2 class="text-center ">{{tier.price}}$</h2>     
+            
+            {% else %}
+            <h2 class="text-center">FREE</h2>    
+            {% endif %}
+          </div>
         </div>
+
         {% endfor %}
         
+    </div>
+
+     <div class="card m-2">
+      <h1 class="card-title text-center p-1" style="">Join us and share the joy... and the beans 🤩</h1> 
     </div>
 
   </div>
@@ -33,6 +70,7 @@
 {% comment %} Gallery {% endcomment %}
 <section class="contianer">
   <div class="d-flex flex-wrap justify-content-center">
+  
     {% for img in image_list %}
     <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem; height: 22rem;">
       {% if useris_authenticated %}
@@ -40,18 +78,17 @@
         ><img
           class="img-fluid card-img-top "
           src="{{img.image_file.url}}"
-          alt="Card image cap"
-          
-
-          
-      /></a>
+          alt="Card image cap" 
+      />
+      
+      </a>
       {% else %}
       <img
         class="img-fluid card-img-top  " 
         src="{{img.image_file.url}}"
         alt="Card image cap"
-        
       />
+
       {% endif %}
       <div class="card-body">
         <h5 class="card-title">{{img.title}}</h5>

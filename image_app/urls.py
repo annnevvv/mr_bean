@@ -1,4 +1,7 @@
 from django.urls import path
+from django.conf.urls.static import static
+
+from mr_bean import settings
 
 from .views import HomeView, ImageFormView, SuccessView, GenerateExpiringLinkView, generate_thumbnail, ImageDetailView, ImageUpdateView, ImageDeleteView
 
@@ -29,3 +32,7 @@ urlpatterns = [
          name='success'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

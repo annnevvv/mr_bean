@@ -35,7 +35,7 @@ class HomeView(ListView):
         context = super().get_context_data(**kwargs)
         context['image_list'] = Image.objects.filter(
             private=False).order_by('-uploaded_at')
-        context['tiers'] = UserAccountTier.objects.all()
+        context['tiers'] = UserAccountTier.objects.all().order_by('price')
         return context
 
     def get_queryset(self):
