@@ -13,9 +13,11 @@ from image_app.models import MiniatureSize
 class UserAccountTier(models.Model):
     name = models.CharField(max_length=50, unique=True)
     mini_size = models.ManyToManyField(MiniatureSize, null=True)
+    ability_to_generate_custom_size_mini = models.BooleanField(default=0)
     presence_link_to_org_file = models.BooleanField(default=0)
     ability_to_generate_expiring_links = models.BooleanField(default=0)
-    ability_to_generate_custom_size_mini = models.BooleanField(default=0)
+
+    price = models.PositiveBigIntegerField(default=1)
 
     def __str__(self):
         return self.name
