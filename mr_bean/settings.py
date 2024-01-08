@@ -156,4 +156,4 @@ MEDIA_URL = "/media/"
 
 LOGIN_REDIRECT_URL = '/users_app/dashboard'
 # LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = '/'

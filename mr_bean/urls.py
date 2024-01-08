@@ -27,9 +27,9 @@ from image_app.views import HomeView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('images', include('image_app.urls', 'images_app')),
+    path('images_app/', include('image_app.urls', 'images_app')),
     path('admin/', admin.site.urls),
-    path('users/', include('users_app.urls', 'users_app')),
+    path('users_app/', include('users_app.urls', 'users_app')),
     path('api/', include('api_app.urls', 'api_app')),
     # path('api/', include(router.urls), name='api'),
 ]

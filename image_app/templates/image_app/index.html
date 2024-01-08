@@ -3,20 +3,85 @@
 
 <section class="contianer">
   <div class="d-flex flex-wrap justify-content-center">
+    <div class="card shadow mb-5 bg-body rounded mt-3">
+      <h1 class="card-title p-3">mrBean project</h1>
+    </div>
+  </div>
+</section>
+
+<section class="contianer">
+    <div class=""> 
+
+    <div class="card-title">
+      <h1 class="card-title p-3">Subscription plans</h1> 
+    </div>
+    
+    
+    <div class="d-flex flex-wrap justify-content-center">   
+
+        {% for tier in tiers %}
+        <div class="card shadow mb-5 bg-body rounded mt-3 m-1" style="width: 17rem; height: 22rem;">        
+        <h1 class="card-title p-3">{{tier.name}}</h1>       
+        </div>
+        {% endfor %}
+        
+    </div>
+
+  </div>
+</section>
+
+{% comment %} Gallery {% endcomment %}
+<section class="contianer">
+  <div class="d-flex flex-wrap justify-content-center">
     {% for img in image_list %}
-    <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem">
-      <a href="{% url 'image_app:image_detail' pk=img.id %}"
+    <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem; height: 22rem;">
+      {% if useris_authenticated %}
+      <a href="{% url 'image_app:image_detail' pk=img.id %}" 
         ><img
-          class="card-img-top"
+          class="img-fluid card-img-top "
           src="{{img.image_file.url}}"
           alt="Card image cap"
+          
+
+          
       /></a>
+      {% else %}
+      <img
+        class="img-fluid card-img-top  " 
+        src="{{img.image_file.url}}"
+        alt="Card image cap"
+        
+      />
+      {% endif %}
       <div class="card-body">
         <h5 class="card-title">{{img.title}}</h5>
         <div class="card-text">{{img.short_description|truncatewords:17}}</div>
       </div>
     </div>
+
     {% endfor %}
   </div>
+
+{% comment %} Pginator {% endcomment %}
+  <div class="pagination container d-flex justify-content-center">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+    </span>
+      </div>
+    {% endif %}
+  </div>
+  </div>
 </section>
+
 {% endblock %}

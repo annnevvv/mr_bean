@@ -25,10 +25,21 @@ from datetime import timedelta, timezone
 
 
 class HomeView(ListView):
-    model = Image
+    # model = Image
     template_name = 'image_app/index.html'
-    context_object_name = 'image_list'
-    ordering = ['-uploaded_at']
+    # context_object_name = 'image_list'
+    # ordering = ['-uploaded_at']
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image_list'] = Image.objects.filter(
+            private=False).order_by('-uploaded_at')
+        context['tiers'] = UserAccountTier.objects.all()
+        return context
+
+    def get_queryset(self):
+        return Image.objects.filter(private=False).order_by('-uploaded_at')
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -47,7 +58,7 @@ class SuccessView(TemplateView):
     template_name = 'success.html'
 
 
-class ImageDetailView(DetailView):
+class ImageDetailView(LoginRequiredMixin, DetailView):
     model = Image
     template_name = 'image_app/image_detail.html'
     context_object_name = 'image_instance'
