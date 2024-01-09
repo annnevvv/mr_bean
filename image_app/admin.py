@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 
-from .models import Image, MiniatureSize, ExpiringLink, ImageComment
+from .models import ImageModel, MiniatureSize, ExpiringLink, ImageComment
 from users_app.models import UserAccountTier, UserProfile
 
 # Register your models here.
 
-admin.site.register(Image)
+admin.site.register(ImageModel)
 admin.site.register(MiniatureSize)
 admin.site.register(ExpiringLink)
 admin.site.register(ImageComment)

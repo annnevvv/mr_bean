@@ -1,7 +1,0 @@
-.card-img-top img {
-  width: 100%; /* 100% szerokości kontenera */
-  height: 100%; /* 100% wysokości kontenera */
-  object-fit: cover; /* przycina obraz, aby wypełnić całe pole */
-  object-position: center center; /* ustawia obraz na środku kontenera */
-  position: absolute;
-}

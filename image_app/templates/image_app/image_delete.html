@@ -6,7 +6,7 @@
     <div class="card m-1">
       <img
         class="card-img"
-        src="{{ image.image_file.url }}"
+        src="{{ imagemodel.image_file.url }}"
         style="max-width: 22rem; max-height: 22rem"
       />
     </div>
@@ -18,7 +18,7 @@
         </p>
         <a
           class="btn btn-success m-1"
-          href="{% url 'image_app:image_detail' pk=image.id %}"
+          href="{% url 'image_app:image_detail' pk=imagemodel.id %}"
           class="btn btn-success"
           >Cancel</a
         >

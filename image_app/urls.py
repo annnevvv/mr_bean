@@ -22,9 +22,13 @@ urlpatterns = [
     path('image/<int:pk>/', ImageDetailView.as_view(), name='image_detail'),
 
     # THUMBNAIL GENERATE
-    path('generate-thumbnail', generate_thumbnail, name='generate-thumbnail'),
+    #     path('generate-thumbnail', generate_thumbnail, name='generate-thumbnail'),
+
+    path('thumbnails/<int:image_id>/<int:th_width>/<int:th_height>/',
+         generate_thumbnail,
+         name='generate-thumbnail'),
     path('generate_expiring_link/<int:image_id>/<int:th_time>',
-         GenerateExpiringLinkView.as_view()),
+         GenerateExpiringLinkView.as_view(), name='generate-exp-link'),
 
     # OTHER
 

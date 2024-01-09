@@ -1,13 +1,13 @@
 from django import template
 
-from image_app.models import Image
+from image_app.models import ImageModel
 
 register = template.Library()
 
 
 @register.simple_tag
 def total_img(user):
-    counter = Image.objects.filter(user=user).count()
+    counter = ImageModel.objects.filter(user=user).count()
     print(counter)
     return counter
 

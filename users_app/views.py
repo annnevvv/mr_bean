@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
-from image_app.models import Image
+from image_app.models import ImageModel
 
 from .models import UserAccountTier, UserProfile
 
@@ -39,7 +39,7 @@ class UserDasboard(LoginRequiredMixin, View):
 
         print(f"user_profile: {user_profile}")
 
-        img_sended_by_user = Image.objects.filter(
+        img_sended_by_user = ImageModel.objects.filter(
             user=user.id).order_by('-uploaded_at')
 
         print(f"user_profile_mini: {img_sended_by_user}")

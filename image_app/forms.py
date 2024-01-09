@@ -1,10 +1,10 @@
 from django import forms
-from .models import Image, ExpiringLink
+from .models import ImageModel, ExpiringLink
 
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = ImageModel
         fields = ['title', 'image_file', 'short_description']
         short_description = forms.CharField(required=False,
                                             widget=forms.Textarea)

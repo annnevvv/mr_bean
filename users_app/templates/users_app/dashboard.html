@@ -24,7 +24,7 @@
           overflow: hidden;
         "
       >
-        <img src="{{ user_profile.avatar.url }}" />
+        <img src="{{ user_profile.avatar.url }}" style="max-height: 4rem;"/>
       </a>
 
       <div class="card-body">
@@ -55,7 +55,7 @@
                 <li class="list-group-item">Avidable Thumbnail sizes:</li>
 
                 {% for mini in tier.mini_size.all %}
-                <li class="list-group-item m-0 p-0" style="scale: 88%; ">{{mini.height}}x{{mini.width}}</li>
+                <li class="list-group-item m-0 p-0" style="scale: 88%; ">{{mini}}px</li>
                 {% endfor %}
 
               </ul class="list-group list-group-flush">
@@ -97,11 +97,13 @@
         {% for img in img_sended_by_user %}
         <div class="col">
           <div class="card shadow mb-5 bg-body rounded" style="width: 17rem">
-            <a href="{% url 'image_app:image_detail' pk=img.id %}"
+            <a 
+            href="{% url 'image_app:image_detail' pk=img.id %}"
+            target="_blank"
               ><img
                 class="card-img-top"
                 src="{{img.image_file.url}}"
-                alt="Card image cap"
+                alt="Card image cap" 
             /></a>
 
             <div class="card-body">
@@ -113,16 +115,21 @@
                 <a />
                 {% if tier == user_profile.tier %}
                 <a />
-                {%for mini in tier.mini_size.all%}
+                {% for mini in tier.mini_size.all %}
 
-                <a href="#" class="btn btn-primary m-1"
-                  >{{mini.height}}x{{mini.width}}</a
+                <a href="{% url 'image_app:generate-thumbnail' image_id=img.pk th_width=mini.width th_height=mini.height  %}" 
+                class="btn btn-primary m-1" 
+                target="_blank"
+                  >{{mini}}px</a
                 >
 
                 {% endfor %}
                 <a />
                 {% if tier.presence_link_to_org_file %}
-                <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+                <a href="{% url 'image_app:image_detail' pk=img.pk %}" 
+                class="btn btn-primary m-1"
+                target="_blank"
+                >Orginal IMG</a>
                 {% endif %}
                 <a />
 
@@ -135,8 +142,8 @@
                 <a />
                 {% endfor %}
                 <div class="col">
-                  <a href="#" class="btn btn-danger m-1">EDIT</a>
-                  <a href="#" class="btn btn-danger m-1">DELETE</a>
+                  <a href="{% url 'image_app:image_update' pk=img.pk %}" class="btn btn-danger m-1">UPDATE</a>
+                  <a href="{% url 'image_app:image_delete' pk=img.pk %}" class="btn btn-danger m-1">DELETE</a>
                 </div>
               </div>
             </ul>

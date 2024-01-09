@@ -5,8 +5,13 @@
   <div class="d-flex m-1">
     <div class="card m-1">
       <h1 class="card-title">Edit Image</h1>
-      <img class="card-img" src="{{ image.image_file.url }}" />
+      <img
+        class="card-img"
+        src="{{ imagemodel.image_file.url }}"
+        alt="{{ imagemodel.title }}"
+      />
     </div>
+
     <div class="card m-1 p-2">
       <form method="post" action="">
         {% csrf_token %} {{ form.as_p }}

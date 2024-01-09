@@ -7,7 +7,7 @@ def user_uploaded_image_path(instance, filename):
     return f'users/{instance.user.id}/uploaded_img/{filename}'
 
 
-class Image(models.Model):
+class ImageModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     image_file = models.ImageField(upload_to=user_uploaded_image_path,
@@ -16,6 +16,7 @@ class Image(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     short_description = models.TextField(max_length=300, null=True, blank=True)
     private = models.BooleanField(default=True)
+    beans = models.PositiveIntegerField(default=3)
 
     def __str__(self):
         return self.title
@@ -23,7 +24,7 @@ class Image(models.Model):
 
 class ImageComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    img = models.ForeignKey(Image, on_delete=models.CASCADE)
+    img = models.ForeignKey(ImageModel, on_delete=models.CASCADE)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     text = models.TextField(validators=[
@@ -49,5 +50,5 @@ class ExpiringLink(models.Model):
     expiration = models.PositiveIntegerField(
         validators=[MinValueValidator(300), MaxValueValidator(3000)],
         default=3000)
-    img = models.OneToOneField(Image, on_delete=models.CASCADE,
+    img = models.OneToOneField(ImageModel, on_delete=models.CASCADE,
                                null=True, blank=True)

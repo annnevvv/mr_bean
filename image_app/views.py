@@ -15,11 +15,12 @@ from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
 from .forms import ImageForm, ExpiringLinkForm
-from .models import Image, ImageComment, ExpiringLink
+from .models import ImageModel, ImageComment, ExpiringLink, MiniatureSize
 from users_app.models import UserAccountTier, UserProfile
 
 
 from datetime import timedelta, timezone
+from PIL import Image
 
 # Create your views here.
 
@@ -33,13 +34,14 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['image_list'] = Image.objects.filter(
+        context['image_list'] = ImageModel.objects.filter(
             private=False).order_by('-uploaded_at')
         context['tiers'] = UserAccountTier.objects.all().order_by('price')
+        context['minis'] = MiniatureSize.objects.all()
         return context
 
     def get_queryset(self):
-        return Image.objects.filter(private=False).order_by('-uploaded_at')
+        return ImageModel.objects.filter(private=False).order_by('-uploaded_at')
 
 
 class ImageFormView(LoginRequiredMixin, FormView):
@@ -59,7 +61,7 @@ class SuccessView(TemplateView):
 
 
 class ImageDetailView(LoginRequiredMixin, DetailView):
-    model = Image
+    model = ImageModel
     template_name = 'image_app/image_detail.html'
     context_object_name = 'image_instance'
     pk_url_kwarg = 'pk'
@@ -79,12 +81,12 @@ class ImageDetailView(LoginRequiredMixin, DetailView):
 
 class ImageUpdateForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = ImageModel
         fields = "__all__"
 
 
 class ImageUpdateView(UpdateView):
-    model = Image
+    model = ImageModel
     template_name = 'image_app/image_update.html'
     form_class = ImageUpdateForm
     success_url = reverse_lazy('image_app:success')
@@ -97,7 +99,7 @@ class ImageUpdateView(UpdateView):
 
 
 class ImageDeleteView(DeleteView):
-    model = Image
+    model = ImageModel
     template_name = 'image_app/image_delete.html'
     success_url = reverse_lazy('image_app:success')
 
@@ -115,7 +117,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
     template_name = 'image_app/generate_exp_link.html'
 
     def get(self, request, image_id, th_time=310):
-        image = Image.objects.get(pk=image_id)
+        image = ImageModel.objects.get(pk=image_id)
         form = ExpiringLinkForm()
 
         try:
@@ -127,7 +129,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
                           {'image': image, 'form': form, 'links': False})
 
     def post(self, request, image_id, th_time=310):
-        image = Image.objects.get(pk=image_id)
+        image = ImageModel.objects.get(pk=image_id)
         form = ExpiringLinkForm(
             request.POST)
 
@@ -170,7 +172,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
 @login_required
 def generate_thumbnail(request, image_id, th_width, th_height):
-    image = Image.objects.get(pk=image_id)
+    image = ImageModel.objects.get(pk=image_id)
 
     if image.image_file.name.lower().endswith(('.jpg', '.jpeg', '.png')):
         img = Image.open(image.image_file.path)
@@ -207,7 +209,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
     template_name = 'image_app/generate-exp-link.html'
 
     def get(self, request, image_id, th_time=310):
-        image = Image.objects.get(pk=image_id)
+        image = ImageModel.objects.get(pk=image_id)
         form = ExpiringLinkForm()
 
         try:
@@ -219,7 +221,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
                           {'image': image, 'form': form, 'links': False})
 
     def post(self, request, image_id, th_time=310):
-        image = Image.objects.get(pk=image_id)
+        image = ImageModel.objects.get(pk=image_id)
         form = ExpiringLinkForm(
             request.POST)  # request.POSt - for make work form in adding links
 
@@ -261,7 +263,7 @@ class GenerateExpiringLinkView(LoginRequiredMixin, View):
 
 
 def show_generate_thumbnail(request, image_id, link_name):
-    image = Image.objects.get(pk=image_id)
+    image = ImageModel.objects.get(pk=image_id)
     link = ExpiringLink.objects.get(name=link_name)
 
     current_time = timezone.now()
@@ -280,7 +282,7 @@ def show_generate_thumbnail(request, image_id, link_name):
 
 
 class ImageModelViewSet(ModelViewSet):
-    queryset = Image.objects.all()
+    queryset = ImageModel.objects.all()
     serializer_class = ImageModelSerializer
 
 

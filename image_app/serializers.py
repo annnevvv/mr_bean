@@ -1,12 +1,12 @@
 
-from .models import Image, ImageComment
+from .models import ImageModel, ImageComment
 
 from rest_framework import serializers
 
 
 class ImageModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
+        model = ImageModel
         fields = '__all__'
 
 
