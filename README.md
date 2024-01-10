@@ -5,7 +5,8 @@
 ## Overview
 
 The Image Sharing Platform is designed for sharing and commenting on images, created for learning purposes with Django Rest Framework, API usage, and Bootstrap. The project revolves around themes related to Rowan Atkinson and his iconic character, Mr. Bean. A guiding quote for the project is "I never lose. I either win, or I learn." - Nelson Mandela.
-Features
+
+## Features
 
     Users can add files (CRUD operations) and share and comment on them publicly.
     Users earn points for their activity, introducing a gamification element.
