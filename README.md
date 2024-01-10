@@ -1,6 +1,6 @@
 ### REDME
 
-### Image Sharing Platform Project
+# Image Sharing Platform Project
 
 ## Overview
 
@@ -41,4 +41,10 @@ Additional Notes
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 Contact
 
-For any inquiries or feedback, please contact the project maintainer at ...
+## Contact
+
+Feel free to contact me via GitHub and LinkedIn.
+
+For any inquiries or feedback, please contact the project maintainer at GitHub.
+
+[![linkedin]](https://www.linkedin.com/in/annawalaszek/)
