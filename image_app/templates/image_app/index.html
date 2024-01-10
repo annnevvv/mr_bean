@@ -1,0 +1,130 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
+
+<section class="contianer">
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card bg-dark text-light shadow mb-3 px-5 rounded mt-3">
+      <h1 class="card-title p-3"> Welcome to the 
+      <img src="{% static 'images/logo.png' %}" alt="logo" style="max-height: 4.4rem"/> 's best FANS website!</h1>
+    </div>
+  </div>
+</section>
+
+<section class="contianer dark bg-dark ">
+    <div class="row justify-content-center"> 
+
+    <div class="card m-2">
+      <h2 class="card-title text-center p-1" style="">Subscription plans</h2> 
+    </div>
+    
+    
+    <div class="d-flex flex-wrap justify-content-center">   
+
+        {% for tier in tiers %}
+        <div class="card border-warning shadow bg-light rounded m-3" style="width: 20rem; height: 33rem;">        
+          <h2 class="card-title card-header p-3 text-center">{{tier.name}}</h2>  
+
+          {% if tier.mini_size %}
+          <h5 class="text-center">Generate thumbnails in sizes:</h5> 
+         
+          {% for mini in minis %}
+
+          {% if mini in tier.mini_size.all  %}
+          <p class="card-title mt-0 mb-0 text-center">{{mini}}px<p/>
+          {% endif %}     
+
+          {% endfor %}
+
+          {% endif %}
+    
+
+          {% if tier.presence_link_to_org_file %}
+          <h5 class="text-center mt-1">Share your screenshots with your friends in the original size.</h5>
+          {% endif %}       
+
+          {% if tier.ability_to_generate_expiring_links %}
+          <h5 class="text-center mt-1">Generate expiring links for your posts.</h5>
+          {% endif %}
+
+          {% if tier.ability_to_generate_custom_size_mini %}
+          <h5 class="text-center mt-1">Generate thumbnails in <span>custom</span> sizes</h5>           
+          {% endif %}
+
+          <div class="mt-auto card-footer text-center mb-2">
+            <button class="btn btn-danger mb-2">JOIN</button>  
+
+            {% if tier.price > 0 %}
+            <h2 class="text-center "><span>{{tier.price}}$</span> /mnth</h2>     
+            
+            {% else %}
+            <h2 class="text-center">FREE</h2>    
+            {% endif %}
+          </div>
+        </div>
+
+        {% endfor %}
+        
+    </div>
+
+     <div class="card m-2">
+      <h1 class="card-title text-center p-1" style="">Join us and share the joy... and the beans 🤩</h1> 
+    </div>
+
+  </div>
+</section>
+
+{% comment %} Gallery {% endcomment %}
+<section class="contianer">
+  <div class="d-flex flex-wrap justify-content-center">
+  
+    {% for img in image_list %}
+    <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem; height: 22rem;">
+      {% if useris_authenticated %}
+      <a href="{% url 'image_app:image_detail' pk=img.id %}" 
+        ><img
+          class="img-fluid card-img-top "
+          src="{{img.image_file.url}}"
+          alt="Card image cap" 
+      />
+      
+      </a>
+      {% else %}
+      <img
+        class="img-fluid card-img-top  " 
+        src="{{img.image_file.url}}"
+        alt="Card image cap"
+      />
+
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{img.title}}</h5>
+        <div class="card-text">{{img.short_description|truncatewords:17}}</div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+{% comment %} Pginator {% endcomment %}
+  <div class="pagination container d-flex justify-content-center">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+    </span>
+      </div>
+    {% endif %}
+  </div>
+  </div>
+</section>
+
+{% endblock %}

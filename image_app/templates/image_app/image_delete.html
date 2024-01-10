@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
+
+<div class="container">
+  <div class="d-flex justify-content-center m-1">
+    <div class="card m-1">
+      <img
+        class="card-img"
+        src="{{ imagemodel.image_file.url }}"
+        style="max-width: 22rem; max-height: 22rem"
+      />
+    </div>
+    <div class="card m-1">
+      <div class="card-body">
+        <h2 class="card-title">Delete Image</h2>
+        <p class="card-text">
+          Are you sure you want to delete the image "{{ image.title }}"?
+        </p>
+        <a
+          class="btn btn-success m-1"
+          href="{% url 'image_app:image_detail' pk=imagemodel.id %}"
+          class="btn btn-success"
+          >Cancel</a
+        >
+        <form method="post" action="">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger m-1">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
