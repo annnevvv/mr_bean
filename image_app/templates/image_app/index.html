@@ -10,18 +10,20 @@
   </div>
 </section>
 
+{% comment %} Tiers crads {% endcomment %}
 <section class="contianer dark bg-dark ">
     <div class="row justify-content-center"> 
 
     <div class="card m-2">
       <h2 class="card-title text-center p-1" style="">Subscription plans</h2> 
     </div>
-    
-    
+        
     <div class="d-flex flex-wrap justify-content-center">   
 
         {% for tier in tiers %}
-        <div class="card border-warning shadow bg-light rounded m-3" style="width: 20rem; height: 33rem;">        
+        
+        <div class="card border-warning shadow bg-light rounded m-3 hover-efect" 
+        style="width: 20rem; height: 33rem;">        
           <h2 class="card-title card-header p-3 text-center">{{tier.name}}</h2>  
 
           {% if tier.mini_size %}
@@ -61,8 +63,9 @@
             {% endif %}
           </div>
         </div>
-
+        
         {% endfor %}
+        
         
     </div>
 
@@ -78,8 +81,10 @@
   <div class="d-flex flex-wrap justify-content-center">
   
     {% for img in image_list %}
-    <div class="card shadow mb-5 bg-body rounded m-1" style="width: 17rem; height: 22rem;">
-      {% if useris_authenticated %}
+    <div class="card shadow mb-5 bg-body rounded m-2 hover-efect" 
+    style="width: 17rem; height: 22rem;">
+      
+      {% if user.is_authenticated %}      
       <a href="{% url 'image_app:image_detail' pk=img.id %}" 
         ><img
           class="img-fluid card-img-top "
@@ -88,7 +93,7 @@
       />
       
       </a>
-      {% else %}
+      {% else %}      
       <img
         class="img-fluid card-img-top  " 
         src="{{img.image_file.url}}"

@@ -1,17 +1,21 @@
-from .serializers import UserAccountTierSerializer, UserProfileModelSerializer
-from rest_framework.viewsets import ModelViewSet
+
+
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView
+from django.views.generic import DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+
+from rest_framework.viewsets import ModelViewSet
 
 from image_app.models import ImageModel
 
 from .models import UserAccountTier, UserProfile
 
+from .serializers import UserAccountTierSerializer, UserProfileModelSerializer
 
 # Create your views here.
 
@@ -53,8 +57,18 @@ class UserDasboard(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
-# API ViewSets
+class UserProfileDetailView(LoginRequiredMixin, TemplateView):
+    model = UserProfile
+    template_name = 'users_app/user_profile_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        context['user_profile'] = user_profile
+        return context
+
+
+# API ViewSets
 
 class UserAccountTierViewSet(ModelViewSet):
     queryset = UserAccountTier.objects.all()

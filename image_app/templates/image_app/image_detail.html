@@ -15,7 +15,9 @@
 
     <div class="col m-2">
       <div class="card m-1">
-        <h5 class="card-title m-2">Subscribed plan: {{ user_profile.tier }}</h5>
+        <h5 class="card-title m-2">
+          Your subscribed plan: {{ user_profile.tier }}
+        </h5>
       </div>
 
       <div class="card m-1">
@@ -27,8 +29,9 @@
               <span class="card-text">
                 - {% if image_instance.private %} Private
                 <span> </span>
-                {% else %} Public {% endif %}
+                {% else %} Published {% endif %}
               </span>
+              <span> by {{image_instance.user}}</span>
             </h4>
           </li>
           <li class="list-group-item">
@@ -50,15 +53,21 @@
             <a href="#" class="btn btn-primary m-1"
               >{{mini.height}}x{{mini.width}}</a
             >
-            {% endfor %}<a href="#" class="btn btn-primary m-1"
-              >Custom size mini</a
-            >
+            {% endfor %}
+            <a></a>
+            {% if user_profile.ability_to_generate_custom_size_mini %}
+            <a href="#" class="btn btn-primary m-1">Custom size mini</a>
+            {% endif %}
           </li>
 
+          {% if image_instance.user == user %}
           <li class="list-group-item">
             <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+            {% if user_profile.ability_to_generate_expiring_links %}
             <a href="#" class="btn btn-primary m-1">Temporary Link</a>
+            {% endif %}
           </li>
+
           <li class="list-group-item">
             <a href="#" class="btn btn-primary m-1">
               {% if image_instance.private %} Change to public
@@ -77,10 +86,13 @@
               >Delete</a
             >
           </li>
+          {% endif %}
         </ul>
       </div>
     </div>
   </section>
+
+  {% comment %} Comment area {% endcomment %}
   <section class="d-flex flex-wrap m-3">
     <div class="col">
       <div class="m-1">
