@@ -9,12 +9,12 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 
 from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
-from .forms import ImageForm, ExpiringLinkForm
+from .forms import ImageForm, ExpiringLinkForm, ImageCommentForm
 from .models import ImageModel, ImageComment, ExpiringLink, MiniatureSize
 from users_app.models import UserAccountTier, UserProfile
 
@@ -60,23 +60,60 @@ class SuccessView(TemplateView):
     template_name = 'success.html'
 
 
-class ImageDetailView(LoginRequiredMixin, DetailView):
-    model = ImageModel
+# class ImageDetailView(LoginRequiredMixin, DetailView):
+#     model = ImageModel
+#     template_name = 'image_app/image_detail.html'
+#     context_object_name = 'image_instance'
+#     pk_url_kwarg = 'pk'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+
+#         image_comments = ImageComment.objects.filter(img=self.object)
+#         context['image_comments'] = image_comments
+
+#         comment_form = ImageCommentForm()
+#         context['comment_form'] = comment_form
+
+#         tiers = UserAccountTier.objects.all()
+#         context['tiers'] = tiers
+
+#         user_profile = UserProfile.objects.get(user=self.request.user.id)
+#         context['user_profile'] = user_profile
+
+#         return context
+
+class ImageDetailView(CreateView):
     template_name = 'image_app/image_detail.html'
-    context_object_name = 'image_instance'
-    pk_url_kwarg = 'pk'
+    form_class = ImageCommentForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        image_comments = ImageComment.objects.filter(img=self.object)
+        image_instance = ImageModel.objects.get(pk=self.kwargs['pk'])
+
+        image_comments = ImageComment.objects.filter(img=image_instance)
         tiers = UserAccountTier.objects.all()
         user_profile = UserProfile.objects.get(user=self.request.user.id)
 
+        context['image_instance'] = image_instance
         context['image_comments'] = image_comments
         context['tiers'] = tiers
         context['user_profile'] = user_profile
+
         return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.image_instance = ImageModel.objects.get(
+            pk=self.kwargs['pk'])
+        self.object.save()
+
+        print(f'ImageModel ID: {self.kwargs["pk"]}')
+        print(f'Comment text: {form.cleaned_data["text"]}')
+
+    def get_success_url(self):
+        return reverse_lazy('image_app:image_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class ImageUpdateForm(forms.ModelForm):
@@ -102,15 +139,6 @@ class ImageDeleteView(DeleteView):
     model = ImageModel
     template_name = 'image_app/image_delete.html'
     success_url = reverse_lazy('image_app:success')
-
-
-# class ImageMixin:
-#     model = Image
-#     template_name = 'image_app/image_update_delete.html'
-#     form_class = ImageUpdateForm
-
-#     def get_success_url(self):
-#         return reverse_lazy('image_detail', kwargs={'pk': self.object.pk})
 
 
 class GenerateExpiringLinkView(LoginRequiredMixin, View):

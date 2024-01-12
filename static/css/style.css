@@ -1,7 +1,26 @@
 .hover-efect:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-.a:hover {
-  transform: scale(1.05);
+a:hover {
+  transform: scale(1.03);
+}
+
+.my-element {
+  transition: transform 0.3s ease-in-out; /* Dodanie płynności do efektu */
+}
+
+.card-top-cover-img {
+  width: 17rem;
+  height: 17rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-top-cover-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  position: absolute;
 }

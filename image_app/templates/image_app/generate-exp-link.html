@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
+
+<div style="margin: 22px">
+  <div style="margin: auto; max-width: 50%">
+    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+      <h3>{{ image }}</h3>
+
+      {% if links %} {{ links.name }}
+      <a href="{% url 'image_app:show-link' image.id links.name %}">
+        EXPIRING LINK TO VIEW
+      </a>
+      <form method="post">
+        {% csrf_token %}
+        <button
+          type="submit"
+          name="delete_links"
+          value="{{ links.name}}"
+          class="btn btn-danger"
+        >
+          Delete Link
+        </button>
+      </form>
+      {% endif %}
+
+      <img style="" src="{{ image.image_file.url }}" />
+
+      {% if not links %}
+      <div style="margin: 1rem">
+        <form
+          method="post"
+          action="{% url 'image_app:generate-exp-link' image_id=image.id th_time=340 %}"
+        >
+          {% csrf_token %} {{ form.as_p }}
+          <p>Expiration is counting in seconds</p>
+          <button class="btn btn-danger" type="submit" name="create_link">
+            Create expiring LINK
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

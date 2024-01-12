@@ -1,5 +1,5 @@
 from django import forms
-from .models import ImageModel, ExpiringLink
+from .models import ImageModel, ExpiringLink, ImageComment
 
 
 class ImageForm(forms.ModelForm):
@@ -8,6 +8,12 @@ class ImageForm(forms.ModelForm):
         fields = ['title', 'image_file', 'short_description']
         short_description = forms.CharField(required=False,
                                             widget=forms.Textarea)
+
+
+class ImageCommentForm(forms.ModelForm):
+    class Meta:
+        model = ImageComment
+        fields = '__all__'
 
 
 class ExpiringLinkForm(forms.ModelForm):

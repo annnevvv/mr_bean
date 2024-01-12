@@ -49,10 +49,15 @@
 
         <ul class="list-group list-group-flush">
           <li class="list-group-item d-flex">
+            {% comment %}--------- AVIDABLE MINI SIZE -------- {% endcomment %}
             {% for mini in user_profile.tier.mini_size.all %}
-            <a href="#" class="btn btn-primary m-1"
-              >{{mini.height}}x{{mini.width}}</a
+
+            <a
+              href="{% url 'image_app:generate-thumbnail' image_id=image_instance.pk th_width=mini.width th_height=mini.height %}"
+              class="btn btn-primary m-1"
+              >{{mini}}</a
             >
+
             {% endfor %}
             <a></a>
             {% if user_profile.ability_to_generate_custom_size_mini %}
@@ -62,7 +67,12 @@
 
           {% if image_instance.user == user %}
           <li class="list-group-item">
-            <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+            <a
+              href="{% url 'image_app:image_detail' pk=image_instance.id %}"
+              class="btn btn-primary m-1"
+              >Orginal IMG</a
+            >
+
             {% if user_profile.ability_to_generate_expiring_links %}
             <a href="#" class="btn btn-primary m-1">Temporary Link</a>
             {% endif %}
@@ -93,11 +103,23 @@
   </section>
 
   {% comment %} Comment area {% endcomment %}
+
   <section class="d-flex flex-wrap m-3">
     <div class="col">
       <div class="m-1">
         <h5>Add comment</h5>
-        <div class="card p-1 m-1"></div>
+        <div class="comment-form">
+          <h3>Add a Comment</h3>
+          <form method="post">
+            {% csrf_token %} form {{ comment_form.as_p }}
+            <a></a>
+            {% for field in form %} {{ field.label_tag }}: {{ field.value }}
+            <a></a>
+            {% endfor %}
+            <a></a>
+            <button type="submit">Submit Comment</button>
+          </form>
+        </div>
       </div>
     </div>
 
