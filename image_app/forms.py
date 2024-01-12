@@ -13,7 +13,7 @@ class ImageForm(forms.ModelForm):
 class ImageCommentForm(forms.ModelForm):
     class Meta:
         model = ImageComment
-        fields = '__all__'
+        fields = {'text'}
 
 
 class ExpiringLinkForm(forms.ModelForm):

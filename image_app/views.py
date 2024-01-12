@@ -2,7 +2,7 @@
 from io import BytesIO
 from django import forms
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
@@ -60,60 +60,73 @@ class SuccessView(TemplateView):
     template_name = 'success.html'
 
 
-# class ImageDetailView(LoginRequiredMixin, DetailView):
-#     model = ImageModel
-#     template_name = 'image_app/image_detail.html'
-#     context_object_name = 'image_instance'
-#     pk_url_kwarg = 'pk'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-
-#         image_comments = ImageComment.objects.filter(img=self.object)
-#         context['image_comments'] = image_comments
-
-#         comment_form = ImageCommentForm()
-#         context['comment_form'] = comment_form
-
-#         tiers = UserAccountTier.objects.all()
-#         context['tiers'] = tiers
-
-#         user_profile = UserProfile.objects.get(user=self.request.user.id)
-#         context['user_profile'] = user_profile
-
-#         return context
-
-class ImageDetailView(CreateView):
+class ImageDetailView(LoginRequiredMixin, DetailView):
+    model = ImageModel
     template_name = 'image_app/image_detail.html'
-    form_class = ImageCommentForm
+    context_object_name = 'image_instance'
+    pk_url_kwarg = 'pk'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        image_instance = ImageModel.objects.get(pk=self.kwargs['pk'])
-
-        image_comments = ImageComment.objects.filter(img=image_instance)
-        tiers = UserAccountTier.objects.all()
-        user_profile = UserProfile.objects.get(user=self.request.user.id)
-
-        context['image_instance'] = image_instance
+        image_comments = ImageComment.objects.filter(img=self.object)
         context['image_comments'] = image_comments
+
+        comment_form = ImageCommentForm()
+        context['comment_form'] = comment_form
+
+        tiers = UserAccountTier.objects.all()
         context['tiers'] = tiers
+
+        user_profile = UserProfile.objects.get(user=self.request.user.id)
         context['user_profile'] = user_profile
 
         return context
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.image_instance = ImageModel.objects.get(
-            pk=self.kwargs['pk'])
-        self.object.save()
+    def post(self, request, *args, **kwargs):
+        comment_form = ImageCommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.img = self.get_object()
+            comment.user = request.user
+            comment.save()
+            return redirect('image_app:image_detail', pk=self.kwargs['pk'])
 
-        print(f'ImageModel ID: {self.kwargs["pk"]}')
-        print(f'Comment text: {form.cleaned_data["text"]}')
+        # Jeśli formularz nie jest poprawny, przeładuj stronę z błędami
+        return self.get(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return reverse_lazy('image_app:image_detail', kwargs={'pk': self.kwargs['pk']})
+
+# class ImageDetailView(CreateView):
+#     template_name = 'image_app/image_detail.html'
+#     form_class = ImageCommentForm
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+
+#         image_instance = ImageModel.objects.get(pk=self.kwargs['pk'])
+
+#         image_comments = ImageComment.objects.filter(img=image_instance)
+#         tiers = UserAccountTier.objects.all()
+#         user_profile = UserProfile.objects.get(user=self.request.user.id)
+
+#         context['image_instance'] = image_instance
+#         context['image_comments'] = image_comments
+#         context['tiers'] = tiers
+#         context['user_profile'] = user_profile
+
+#         return context
+
+#     def form_valid(self, form):
+#         self.object = form.save(commit=False)
+#         self.object.image_instance = ImageModel.objects.get(
+#             pk=self.kwargs['pk'])
+#         self.object.save()
+
+#         print(f'ImageModel ID: {self.kwargs["pk"]}')
+#         print(f'Comment text: {form.cleaned_data["text"]}')
+
+#     def get_success_url(self):
+#         return reverse_lazy('image_app:image_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class ImageUpdateForm(forms.ModelForm):
