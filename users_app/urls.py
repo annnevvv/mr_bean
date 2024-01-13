@@ -4,15 +4,24 @@ from django.conf.urls.static import static
 
 from mr_bean import settings
 
-from .views import SignupView, UserDasboard
+from .views import SignupView, UserDasboard, UserProfileDetailView, UserGallery
 
 app_name = 'users_app'
 
 urlpatterns = [
+
+    # autentication
+
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name='signup'),
-    path('dashboard/', UserDasboard.as_view(), name='dashboard')
+
+    #  user side
+
+    path('dashboard/', UserDasboard.as_view(), name='dashboard'),
+    path('user_profile/',
+         UserProfileDetailView.as_view(), name='user_profile'),
+    path('user_gallery/', UserGallery.as_view(), name='user_gallery'),
 ]
 
 if settings.DEBUG:

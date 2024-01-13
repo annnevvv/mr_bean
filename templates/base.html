@@ -51,7 +51,7 @@
               color: darkred;
               border-right: 1px solid grey;
             "
-            class="nav-link pe-lg-4 ps-lg-2"
+            class="nav-link pe-lg-4 ps-lg-2 hover"
             href="/api/"
             target="_blank"
           >
@@ -71,15 +71,6 @@
 
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-              {% comment %}
-              <li class="nav-item ps-lg-2">
-                <a class="nav-link" target="_blank">All img (API view)</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" target="_blank">Yours img (API view)</a>
-              </li>
-              {% endcomment %}
-
               <li class="nav-item me-5 pe-lg-5 ps-lg-5">
                 <a
                   class="nav-link disabled pe-lg-5 ms-lg-5 me-lg-5"
@@ -100,23 +91,56 @@
                   >DASHBOARD</a
                 >
               </li>
-              <li class="nav-item">
+
+              <li class="nav-item dropdown">
                 <a
-                  style="color: darkred"
-                  class="nav-link ms-lg-1 ps-lg-1"
-                  href="{% url 'users_app:logout' %}"
-                  >LOGOUT</a
-                >
-              </li>
-              <li class="nav-item">
-                <p
-                  style="color: grey"
-                  class="nav-link ms-lg-5 ps-lg-1"
-                  href="{% url 'users_app:logout' %}"
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   {{ user.username }}
-                </p>
+                </a>
+
+                <ul class="dropdown-menu">
+                  <li>
+                    Profile Options:
+                    <hr class="dropdown-divider" />
+                  </li>
+
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'users_app:dashboard' %}"
+                      >Dashboard</a
+                    >
+                  </li>
+
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'users_app:user_profile' %}"
+                      >My Profile</a
+                    >
+                  </li>
+
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'users_app:user_gallery' %}"
+                      >Gallery</a
+                    >
+                  </li>
+
+                  <li>
+                    <a class="dropdown-item" href="{% url 'users_app:logout' %}"
+                      >Logout</a
+                    >
+                  </li>
+                </ul>
               </li>
+
               <li>
                 <div
                   style="

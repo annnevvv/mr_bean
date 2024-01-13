@@ -15,7 +15,9 @@
 
     <div class="col m-2">
       <div class="card m-1">
-        <h5 class="card-title m-2">Subscribed plan: {{ user_profile.tier }}</h5>
+        <h5 class="card-title m-2">
+          Your subscribed plan: {{ user_profile.tier }}
+        </h5>
       </div>
 
       <div class="card m-1">
@@ -27,8 +29,9 @@
               <span class="card-text">
                 - {% if image_instance.private %} Private
                 <span> </span>
-                {% else %} Public {% endif %}
+                {% else %} Published {% endif %}
               </span>
+              <span> by {{image_instance.user}}</span>
             </h4>
           </li>
           <li class="list-group-item">
@@ -46,19 +49,35 @@
 
         <ul class="list-group list-group-flush">
           <li class="list-group-item d-flex">
+            {% comment %}--------- AVIDABLE MINI SIZE -------- {% endcomment %}
             {% for mini in user_profile.tier.mini_size.all %}
-            <a href="#" class="btn btn-primary m-1"
-              >{{mini.height}}x{{mini.width}}</a
+
+            <a
+              href="{% url 'image_app:generate-thumbnail' image_id=image_instance.pk th_width=mini.width th_height=mini.height %}"
+              class="btn btn-primary m-1"
+              >{{mini}}</a
             >
-            {% endfor %}<a href="#" class="btn btn-primary m-1"
-              >Custom size mini</a
-            >
+
+            {% endfor %}
+            <a></a>
+            {% if user_profile.ability_to_generate_custom_size_mini %}
+            <a href="#" class="btn btn-primary m-1">Custom size mini</a>
+            {% endif %}
           </li>
 
+          {% if image_instance.user == user %}
           <li class="list-group-item">
-            <a href="#" class="btn btn-primary m-1">Orginal IMG</a>
+            <a
+              href="{% url 'image_app:image_detail' pk=image_instance.id %}"
+              class="btn btn-primary m-1"
+              >Orginal IMG</a
+            >
+
+            {% if user_profile.ability_to_generate_expiring_links %}
             <a href="#" class="btn btn-primary m-1">Temporary Link</a>
+            {% endif %}
           </li>
+
           <li class="list-group-item">
             <a href="#" class="btn btn-primary m-1">
               {% if image_instance.private %} Change to public
@@ -77,18 +96,34 @@
               >Delete</a
             >
           </li>
+          {% endif %}
         </ul>
       </div>
     </div>
   </section>
+
+  {% comment %} Comment area {% endcomment %}
+
   <section class="d-flex flex-wrap m-3">
     <div class="col">
       <div class="m-1">
         <h5>Add comment</h5>
-        <div class="card p-1 m-1"></div>
+        <div class="comment-form">
+          <form method="post">
+            {% csrf_token %} {{ comment_form.as_p }}
+            <a></a>
+            {% for field in form %} {{ field.label_tag }}: {{ field.value }}
+            <a></a>
+            {% endfor %}
+            <a></a>
+            <button class="btn btn-success" type="submit">
+              Submit Comment
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-
+    {% comment %} Komentarze {% endcomment %}
     <div class="col m-1">
       <div class="m-1">
         <h5>Comments :</h5>
@@ -101,6 +136,17 @@
             {{comment.published_at}}, {{comment.updated_at}},
           </p>
           <p class="card-text">{{comment.text}}</p>
+
+          {% if comment.user == user or image_instance.user == user %}
+          <form
+            method="post"
+            action="{% url 'image_app:image_detail' pk=image_instance.id %}"
+          >
+            {% csrf_token %}
+            <input type="hidden" name="comment_id" value="{{ comment.id }}" />
+            <button type="submit" class="btn btn-danger">Delete Comment</button>
+          </form>
+          {% endif %}
         </div>
         {% endfor %}
       </div>

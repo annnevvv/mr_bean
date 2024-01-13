@@ -13,92 +13,14 @@
     <h1 style="margin: 2rem">Your account - Welcome @{{ user }} !</h1>
   </div>
 
-  {% comment %} membership board {% endcomment %}
-  <section class="d-flex justify-content-center text-align: center">
-    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
-      <a
-        class="card-img-top"
-        href="https://www.youtube.com/user/MrBean"
-        target="_blank"
-        style="
-          margin: auto;
-          width: 150px;
-          height: 150px;
-          border-radius: 50%;
-          overflow: hidden;
-        "
-      >
-        <img src="{{ user_profile.avatar.url }}" style="max-height: 4rem;"/>
-      </a>
-
-      <div class="card-body">
-        <h2>Links to:</h2>
-        <lu style="list-style: none; padding-left: 0; text-align: center">
-          <li>
-            <a href="{% url 'image_app:form-upload-img' %} " target="_blank">
-              Add new picture </a
-            >- Upload form
-          </li>
-        </lu>
-      </div>
-    </div>
-    <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
-      <h3>Avidable membership plans:</h3>
-
-      <ul style="list-style: none; padding-left: 0; text-align: center">
-        {% for tier in tiers %}
-        <li class="list-group-item">
-          <h5>{{tier}}  <span style="color: darkred;"><b> {% if user_profile.tier == tier %} - Your subscription{% endif %}</b> </span></h5>
-
-      
-          {% if tier == user_profile.tier %}
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">Avidable Thumbnail sizes:</li>
-
-                {% for mini in tier.mini_size.all %}
-                <li class="list-group-item m-0 p-0" style="scale: 88%; ">{{mini}}px</li>
-                {% endfor %}
-
-              </ul class="list-group list-group-flush">
-            </li>            
-            
-            {% if tier.ability_to_generate_expiring_links%}
-            <li class="list-group-item">
-              Ability to generate custom size thumbnail
-            </li>
-            {% endif %}  
-
-
-            {% if tier.presence_link_to_org_file %}
-            <li class="list-group-item">
-              Ability to generate link to orginal image
-            </li>
-            {% endif %}
-
-            {% if tier.ability_to_generate_expiring_links %}
-            <li class="list-group-item">
-              Ability to generate expiring link              
-            </li>
-            {% endif %}
-
-          </ul>
-          {% endif %} {% endfor %}
-        </li>
-      </ul>
-    </div>
-  </section>
-
-
-  {% comment %} LATEST PICTURE {% endcomment %}
+  
+  {% comment %} PICTURES GALLERY {% endcomment %}
 
   <section>
 
     <div class="text-center">
-      <h3>Latest recently added photos:</h3>
-      <p>(You have total {% total_img user %} images in your gallery.)</p>
+      <h3>Your Gallery:</h3>
+      <p>(You have {% total_img user %} images in.)</p>
     </div>
 
     <div class="container">

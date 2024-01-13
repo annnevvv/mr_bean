@@ -12,6 +12,7 @@ urlpatterns = [
 
     # CRUD
     path('form_upload_img', ImageFormView.as_view(), name='form-upload-img'),
+    #     path('add_comment/<int:image_id>/', add_comment, name='add_comment'),
     path('image/<int:pk>/update/', ImageUpdateView.as_view(),
          name='image_update'),
     path('image/<int:pk>/delete/', ImageDeleteView.as_view(),
