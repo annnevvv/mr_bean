@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 
 from mr_bean import settings
 
-from .views import SignupView, UserDasboard, UserProfileDetailView
+from .views import SignupView, UserDasboard, UserProfileDetailView, UserGallery
 
 app_name = 'users_app'
 
@@ -21,6 +21,7 @@ urlpatterns = [
     path('dashboard/', UserDasboard.as_view(), name='dashboard'),
     path('user_profile/',
          UserProfileDetailView.as_view(), name='user_profile'),
+    path('user_gallery/', UserGallery.as_view(), name='user_gallery'),
 ]
 
 if settings.DEBUG:

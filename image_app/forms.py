@@ -10,10 +10,16 @@ class ImageForm(forms.ModelForm):
                                             widget=forms.Textarea)
 
 
+class ImageUpdateForm(forms.ModelForm):
+    class Meta:
+        model = ImageModel
+        fields = ['title', 'short_description']
+
+
 class ImageCommentForm(forms.ModelForm):
     class Meta:
         model = ImageComment
-        fields = {'text'}
+        fields = ['text']
 
 
 class ExpiringLinkForm(forms.ModelForm):
