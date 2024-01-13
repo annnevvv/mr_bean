@@ -25,10 +25,12 @@
 
     <div class="card m-1 p-2">
       <form method="post" action="">
-        {% csrf_token %} {{ form.as_p }}
+        {% csrf_token %} 
+        {{ form.as_p }}
         <button class="btn btn-danger" type="submit">Save</button>
       </form>
     </div>
+  
   </div>
 </div>
 

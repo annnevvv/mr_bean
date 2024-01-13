@@ -1,7 +1,7 @@
 
 from io import BytesIO
 from django import forms
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import TemplateView, ListView
@@ -14,7 +14,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
-from .forms import ImageForm, ExpiringLinkForm, ImageCommentForm
+from .forms import ImageForm, ExpiringLinkForm, ImageCommentForm, ImageUpdateForm
 from .models import ImageModel, ImageComment, ExpiringLink, MiniatureSize
 from users_app.models import UserAccountTier, UserProfile
 
@@ -92,7 +92,16 @@ class ImageDetailView(LoginRequiredMixin, DetailView):
             comment.save()
             return redirect('image_app:image_detail', pk=self.kwargs['pk'])
 
-        # Jeśli formularz nie jest poprawny, przeładuj stronę z błędami
+        # return self.get(request, *args, **kwargs)
+
+        comment_id = request.POST.get('comment_id')
+        if comment_id:
+            comment = ImageComment.objects.get(
+                id=comment_id, user=request.user)
+            comment.delete()
+
+            return redirect('image_app:image_detail', pk=self.kwargs['pk'])
+
         return self.get(request, *args, **kwargs)
 
 
@@ -127,12 +136,6 @@ class ImageDetailView(LoginRequiredMixin, DetailView):
 
 #     def get_success_url(self):
 #         return reverse_lazy('image_app:image_detail', kwargs={'pk': self.kwargs['pk']})
-
-
-class ImageUpdateForm(forms.ModelForm):
-    class Meta:
-        model = ImageModel
-        fields = "__all__"
 
 
 class ImageUpdateView(UpdateView):

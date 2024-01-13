@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
+{% endcomment %} {% block content %}
+
+<style>
+  style="list-style: none;
+  padding-left: 0;
+  text-align: center;
+</style>
+
+<article style="margin: 0 auto;">
+
+  <div class="d-flex justify-content-center text-center">
+    <h1 style="margin: 2rem">Your account - Welcome @{{ user }} !</h1>
+  </div>
+
+  
+  {% comment %} PICTURES GALLERY {% endcomment %}
+
+  <section>
+
+    <div class="text-center">
+      <h3>Your Gallery:</h3>
+      <p>(You have {% total_img user %} images in.)</p>
+    </div>
+
+    <div class="container">
+      <div class="d-flex flex-wrap p-1 justify-content-center ">
+      
+        {% for img in img_sended_by_user %}
+                
+            <div class="card shadow m-2 bg-body rounded hover-efect" 
+                 style="width: 17rem; height: 36rem;">
+
+              <div class="card-top-cover-img ">
+                <a 
+                href="{% url 'image_app:image_detail' pk=img.id %}"
+                target="_blank">
+
+                <img
+                    class="card-img-top "
+                    src="{{img.image_file.url}}"
+                    alt="Card image cap" 
+                />
+
+                </a>
+              </div>    
+
+              <div class="card-body">
+                <h5 class="card-title">{{ img.title }}</h5>
+                <p class="card-text">{{ img.published_at }}</p>
+                <p class="card-text">{{ img.short_description|truncatewords:17 }}</p>
+
+                <ul class="list-group list-group-flush">
+
+                  {% for tier in tiers %}
+                 
+                    {% if tier == user_profile.tier %}
+                    
+                      {% for mini in tier.mini_size.all %}
+
+                      <a href="{% url 'image_app:generate-thumbnail' image_id=img.pk th_width=mini.width th_height=mini.height  %}" 
+                      class="btn btn-primary m-1" 
+                      target="_blank">{{mini}}px</a>
+                      {% endfor %}
+
+                      
+                      {% if tier.presence_link_to_org_file %}
+                      <a href="{% url 'image_app:image_detail' pk=img.pk %}" 
+                      class="btn btn-primary m-1"
+                      target="_blank">Orginal IMG</a>
+                      {% endif %}
+                    
+
+                      {% if tier.ability_to_generate_expiring_links %}
+                      <a href="{% url 'image_app:generate-exp-link' image_id=img.pk th_time=3000  %}"  class="btn btn-primary m-1">Temporary Link</a> 
+                      {% endif %}
+
+                    {% endif %}
+                  
+                  {% endfor %}
+
+                  <div class="col">
+                    <a href="{% url 'image_app:image_update' pk=img.pk %}" class="btn btn-danger m-1">UPDATE</a>
+                    <a href="{% url 'image_app:image_delete' pk=img.pk %}" class="btn btn-danger m-1">DELETE</a>
+                  </div>
+
+                </ul>
+
+              </div>
+
+            </div>
+
+        {% endfor %}
+      
+    </div>
+  </section>
+</article>
+
+{% endblock %}
