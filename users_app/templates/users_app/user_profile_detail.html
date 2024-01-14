@@ -1,36 +1,74 @@
 {% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
 {% endcomment %} {% block content %}
 
-<h3>{{user}}</h3>
-<h3>{{user_profile}}</h3>
-
 <div class="container">
-  <div class="d-flex m-1">
+  <div class="d-flex m-1 justify-content-center">
+    <h3>YOUR PROFILE - {{user}}</h3>
+  </div>
+
+  <div class="d-flex m-1 justify-content-center">
     <div class="card m-1">
-      <h1 class="card-title">YOUR PROFILE</h1>
+      <h1 class="card-title"></h1>
       <img
+        style="max-height: 22rem; max-width: 33rem"
         class="card-img"
         src="{{ user_profile.avatar.url }}"
         alt="{{ imagemodel.title }}"
       />
     </div>
+  </div>
+
+  <div class="d-flex m-1 justify-content-center">
+    <div class="card m-1">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <p class="card-title">Current subscription plan:</p>
+          <h5 class="card-title">{{ user_profile.tier }}</h5>
+        </li>
+
+        <li class="list-group-item">
+          <p class="card-title">Points scored:</p>
+          <h5 class="card-title">{{ user_profile.points }}</h5>
+        </li>
+      </ul>
+    </div>
+
+    {% comment %} form {% endcomment %}
 
     <div class="card m-1">
-      <h2 class="card-title">{{ user_profile.user.username }}</h2>
-      <h2 class="card-title">{{ user_profile.user.first_name }}
-      <h2 class="card-title">{{ user_profile.user }}</h2>
-      <p class="card-title">{{ user_profile.tier }}</p>
-      <p class="card-title">{{ user_profile.points }}</p>
-    </div>
-
-    <div class="card m-1 p-2">
       <form method="post" action="">
-        {% csrf_token %} 
-        {{ form.as_p }}
-        <button class="btn btn-danger" type="submit">Save</button>
+        {% csrf_token %} {{ form.as_p }} {% comment %}
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class="form-group">
+              <img
+                class=""
+                src="{{ user_profile.avatar.url }}"
+                alt="{{ imagemodel.title }}"
+                style="max-height: 1rem"
+              />
+              <br />
+              <label for="{{ form.title.id_for_label }}">Avatar:</label>
+              {{ form.avatar }} {{ form.avatar.errors }}
+            </div>
+            LI1
+          </li>
+
+          <li class="list-group-item">
+            <div class="form-group">
+              <h5 class="card-title">Upgrade tier:</h5>
+              <label for="{{ form.description.id_for_label.id }}"></label>
+              {{ form.tier }} {{ form.tier.errors }}
+            </div>
+            LI2
+          </li>
+          <li class="list-group-item"></li>
+        </ul>
+        {% endcomment %}
+
+        <button class="btn btn-danger" type="submit">Save changes</button>
       </form>
     </div>
-  
   </div>
 </div>
 

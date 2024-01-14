@@ -10,6 +10,8 @@ class UserForm(forms.ModelForm):
         model = UserProfile
         fields = ['avatar', 'tier']
 
+    # avatar = forms.ImageField(widget=forms.ClearableFileInput)
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

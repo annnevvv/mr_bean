@@ -246,7 +246,7 @@ def generate_thumbnail(request, image_id, th_width, th_height):
         return response
     else:
         raise Http404(
-            "Unsupported image format. Thumbnails can be created from jpg jpeg png formats.")
+            "Unsupported image format. Thumbnails can be created from jpg/jpeg/png formats.")
 
 
 class GenerateExpiringLinkView(LoginRequiredMixin, View):
