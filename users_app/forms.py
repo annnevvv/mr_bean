@@ -8,7 +8,7 @@ from .models import UserProfile
 class UserForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['avatar', 'tier']
+        fields = ['avatar', 'tier', 'about_me']
 
     # avatar = forms.ImageField(widget=forms.ClearableFileInput)
 
