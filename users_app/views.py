@@ -23,13 +23,16 @@ from .serializers import UserAccountTierSerializer, UserProfileModelSerializer
 
 class SignupView(CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('home')
     template_name = 'registration/signup.html'
 
     def form_valid(self, form):
 
         user = form.save()
         login(self.request, user)
+
+        # UserProfile.objects.create(user=user)
+
         return super().form_valid(form)
 
 
