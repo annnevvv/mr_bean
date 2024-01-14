@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% load static %} {% block title %}Login{% endblock %}
+{% block content %}
+
+<div style="margin: auto; max-width: 44%">
+  <h1 style="text-align: center">Signup</h1>
+  <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
+    <form style="margin: auto" method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button class="btn btn-danger" type="submit">Signup</button>
+    </form>
+  </div>
+</div>
+
+<div style="margin: auto; max-width: 44%">
+  <a href="{% url 'users_app:login' %}"
+    ><h3 style="text-align: center">Have account?</h3></a
+  >
+</div>
+
+{% endblock %}

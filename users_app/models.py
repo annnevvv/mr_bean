@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator, MinLengthValidator, MaxValueValidator, MaxLengthValidator
 
 
 from image_app.models import MiniatureSize
@@ -35,7 +36,13 @@ class UserProfile(models.Model):
                              default=1)
     avatar = models.ImageField(upload_to=user_avatar_image_path,
                                default='koteł.jpg')
-    points = models.IntegerField(default=0)
+    points = models.IntegerField(default=5),
+    about_me = models.TextField(null=True, blank=True, validators=[MinLengthValidator(
+        limit_value=30,
+        message="The text must contain at least 30 characters."),
+        MaxLengthValidator(
+        limit_value=3000,
+        message="The text cannot exceed 3000 characters."), ])
 
     def __str__(self):
         return f"{self.user.username}"

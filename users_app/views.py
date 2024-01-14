@@ -83,9 +83,9 @@ class UserGallery(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
-class UserProfileDetailView(LoginRequiredMixin, TemplateView):
+class UserProfileFormView(LoginRequiredMixin, TemplateView):
     # model = UserProfile
-    template_name = 'users_app/user_profile_detail.html'
+    template_name = 'users_app/user_profile_form.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

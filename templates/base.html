@@ -120,7 +120,7 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="{% url 'users_app:user_profile' %}"
+                      href="{% url 'users_app:user_profile_form' %}"
                       >My Profile</a
                     >
                   </li>
@@ -170,6 +170,14 @@
                   class="nav-link ms-lg-5 ps-lg-5"
                   href="{% url 'users_app:login' %}"
                   >LOGIN</a
+                >
+              </li>
+              <li class="ms-lg-5 ps-lg-5 nav-item">
+                <a
+                  style="color: darkred"
+                  class="nav-link ms-lg-5 ps-lg-5"
+                  href="{% url 'users_app:signup' %}"
+                  >SIGNUP</a
                 >
               </li>
               {% endif %}

@@ -3,12 +3,18 @@
 
 <div style="margin: auto; max-width: 44%">
   <h1 style="text-align: center">Login</h1>
+
   <div class="card m-2 p-2 shadow p-3 mb-5 bg-body rounded">
     <form style="margin: auto" method="post">
       {% csrf_token %} {{ form.as_p }}
       <button class="btn btn-danger" type="submit">Log In</button>
     </form>
   </div>
+</div>
+<div class="card m-5 p-3 shadow p-3 mb-5 bg-body rounded">
+  <a class="btn" href="{% url 'users_app:password_reset' %}" class="link">
+    Forgot password?
+  </a>
 </div>
 
 {% endblock %}

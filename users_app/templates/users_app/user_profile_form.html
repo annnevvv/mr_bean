@@ -16,6 +16,12 @@
         alt="{{ imagemodel.title }}"
       />
     </div>
+
+    {% if user_profile.about_me %}
+    <div class="card m-1">
+      <p class="card-text">{{ user_profile.about_me }}</p>
+    </div>
+    {% endif %}
   </div>
 
   <div class="d-flex m-1 justify-content-center">
@@ -29,6 +35,10 @@
         <li class="list-group-item">
           <p class="card-title">Points scored:</p>
           <h5 class="card-title">{{ user_profile.points }}</h5>
+        </li>
+        <li class="list-group-item">
+          <p class="card-title">Email:</p>
+          <h5 class="card-title">e{{ user.email }}</h5>
         </li>
       </ul>
     </div>
