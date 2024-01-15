@@ -1,7 +1,13 @@
-{% extends "base.html" %} {% load static %} {% load customtags %} {% comment %}
-{% endcomment %} {% block content %}
+{% extends "base.html" %} {% load thumbnail %} {% load static %} {% load
+customtags %} {% comment %} {% endcomment %} {% block content %}
 
 <article class="container">
+  {% comment %} <a href="{{ image_instance.image_file.url }}">
+    <img
+      src="{% thumbnail image_instance.image_file 400x0 quality=100 %}"
+      alt="{{ image_instance.title }}"
+  /></a> {% endcomment %}
+
   <section class="d-flex flex-wrap m-3">
     <div class="col">
       <div class="card m-3">
@@ -45,11 +51,42 @@
               {{ image_instance.short_description }}
             </h5>
           </li>
+
+          <li class="list-group-item p-1">
+
+            {% comment %} LIKE HANDLE {% endcomment %}
+
+            <div class="like-handle">
+              {% with total_likes=image_instance.users_likes.count users_like=image_instance.users_likes.all %}
+              
+                <span class="count">
+                  <span class="total">{{ total_likes }} likes</span>
+                </span>
+                
+                  <a
+                    href="#"
+                    data-id="{{ image_instance.id }}"
+                    data-action="{% if request.user in users_like %}not{% endif %}like"
+                    class="like button btn-success p-2"
+                  >
+                    {% if request.user not in users_like %}
+                    like
+                    {% else %}
+                    not like
+                    {% endif %}
+                  </a>
+                             
+              {% endwith %}
+            </div>
+          </li>
+
         </ul>
 
         <ul class="list-group list-group-flush">
           <li class="list-group-item d-flex">
+
             {% comment %}--------- AVIDABLE MINI SIZE -------- {% endcomment %}
+
             {% for mini in user_profile.tier.mini_size.all %}
 
             <a
@@ -64,7 +101,7 @@
             <a href="#" class="btn btn-primary m-1">Custom size mini</a>
             {% endif %}
           </li>
-
+          
           {% if image_instance.user == user %}
           <li class="list-group-item">
             <a
@@ -104,6 +141,8 @@
 
   {% comment %} Comment area {% endcomment %}
 
+  {% comment %} Comment FORM {% endcomment %}
+
   <section class="d-flex flex-wrap m-3">
     <div class="col">
       <div class="m-1">
@@ -123,7 +162,7 @@
         </div>
       </div>
     </div>
-    {% comment %} Komentarze {% endcomment %}
+    {% comment %} COMMENTS LIST {% endcomment %}
     <div class="col m-1">
       <div class="m-1">
         <h5>Comments :</h5>
@@ -153,5 +192,43 @@
     </div>
   </section>
 </article>
+
+{% endblock %}
+
+{% block domready %}
+  const url='{% url 'image_app:like' %}';
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+
+  document.querySelector('a.like').addEventListener('click', function(e) { 
+    e.preventDefault();
+    var likeButton = this;
+
+    var formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+    options['body'] = formData;
+
+    fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+        if (data['status'] === 'ok') 
+        {
+          var previousAction = likeButton.dataset.action;
+
+          var action = previousAction === 'like' ? 'no like' : 'like';
+          likeButton.dataset.action = action;
+          likeButton.innerHTML = action;
+
+          var likeCount = document.querySelector('span.count .total');
+          var totalLikes = parseInt(likeCount.innerHTML);
+          likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;   
+
+    }
+  })
+});
 
 {% endblock %}

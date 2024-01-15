@@ -79,6 +79,7 @@
 
 {% comment %} Gallery {% endcomment %}
 <section class="contianer">
+
   <div class="d-flex flex-wrap justify-content-center">
   
     {% for img in image_list %}
@@ -87,58 +88,128 @@
       class ="card shadow mb-5 bg-body rounded m-2 hover-efect"
       style="width: 17rem; height: 22rem;">
 
-    <div class="card-top-cover-img">
-      
-      {% if user.is_authenticated %}      
-      <a href="{% url 'image_app:image_detail' pk=img.id %}" 
-        ><img
-          class="img-fluid card-img-top "
+      {% comment %} card top {% endcomment %}
+      <div class="card-top-cover-img"> 
+        
+        {% if user.is_authenticated %}      
+        <a href="{% url 'image_app:image_detail' pk=img.id %}" 
+          ><img
+            class="img-fluid card-img-top "
+            src="{{img.image_file.url}}"
+            alt="Card image cap" 
+        />      
+        </a>
+        {% else %}      
+        <img
+          class="img-fluid card-img-top  " 
           src="{{img.image_file.url}}"
-          alt="Card image cap" 
-      />      
-      </a>
-      {% else %}      
-      <img
-        class="img-fluid card-img-top  " 
-        src="{{img.image_file.url}}"
-        alt="Card image cap"
-      />
-
-      {% endif %}
-    </div>
-
-
-    <div>
-      <div class="card-body">
-        <h5 class="card-title">{{img.title}}</h5>
-        <div class="card-text">{{img.short_description|truncatewords:17}}</div>
+          alt="Card image cap"
+        />      
+        {% endif %}
+        
       </div>
-    </div>
+
+      {% comment %} card body {% endcomment %}
+      <div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{img.title}}</h5>
+          <div class="card-text">{{img.short_description|truncatewords:17}}</div>
+        </div>
+
+        <div class="like-handle card-footer">        
+          
+          {% with total_likes=img.users_likes.count users_like=img.users_likes.all %}
+          
+            <span class="count">
+              <span class="total">{{ total_likes }} likes</span>
+            </span>
+            
+            <a
+              href="#"
+              data-id="{{ img.id }}"
+              data-action="{% if request.user in users_like %}not{% endif %}like"
+              class="like button btn-success p-2"
+            >
+              {% if request.user not in users_like %}
+              like
+              {% else %}
+              not like
+              {% endif %}
+            </a>
+                            
+          {% endwith %}          
+
+        </div>
+        
+      </div>
+
     </div>
 
     {% endfor %}
+
   </div>
 
 {% comment %} Pginator {% endcomment %}
-  <div class="pagination container d-flex justify-content-center">
-    <span class="step-links">
-      {% if page_obj.has_previous %}
-      <a href="?page=1">&laquo; first</a>
-      <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-      {% endif %}
+    <div class="pagination container d-flex justify-content-center">
 
-      <span class="current">
-        Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+      <span class="step-links">
+
+        {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current"> Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.</span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">Next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+
       </span>
 
-      {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}">Next</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-    </span>
-      </div>
-    {% endif %}
-  </div>
-  </div>
+    </div>   
+
 </section>
+
+{% endblock %}
+
+
+{% block domready %}
+  const url='{% url 'image_app:like' %}';
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+
+  document.querySelector('a.like').addEventListener('click', function(e) { 
+    e.preventDefault();
+    var likeButton = this;
+
+    var formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+    options['body'] = formData;
+
+    fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+        if (data['status'] === 'ok') 
+        {
+          var previousAction = likeButton.dataset.action;
+
+          var action = previousAction === 'like' ? 'no like' : 'like';
+          likeButton.dataset.action = action;
+          likeButton.innerHTML = action;
+
+          var likeCount = document.querySelector('span.count .total');
+          var totalLikes = parseInt(likeCount.innerHTML);
+          likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;   
+
+    }
+  })
+});
 
 {% endblock %}
