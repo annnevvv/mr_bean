@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 'users_app.apps.UsersAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'easy_thumbnails',
 
     'api_app',
     'image_app',
@@ -156,6 +158,7 @@ MEDIA_URL = "/media/"
 # MEDIA_URL = "/"
 # MEDIA_URL = "/files/" # to było wcześńiej !
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/users_app/dashboard'
-# LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'

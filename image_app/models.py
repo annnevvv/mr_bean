@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.validators import MinValueValidator, MinLengthValidator, MaxValueValidator, MaxLengthValidator
 
 
@@ -17,6 +18,8 @@ class ImageModel(models.Model):
     short_description = models.TextField(max_length=300, null=True, blank=True)
     private = models.BooleanField(default=True)
     beans = models.PositiveIntegerField(default=3)
+    users_likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
 
     def __str__(self):
         return self.title

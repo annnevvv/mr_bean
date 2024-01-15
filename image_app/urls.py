@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 
 from mr_bean import settings
 
-from .views import HomeView, ImageFormView, SuccessView, GenerateExpiringLinkView, generate_thumbnail, ImageDetailView, ImageUpdateView, ImageDeleteView
+from .views import HomeView, ImageFormView, SuccessView, GenerateExpiringLinkView, generate_thumbnail, ImageDetailView, ImageUpdateView, ImageDeleteView, image_like
 
 
 app_name = 'image_app'
@@ -21,6 +21,9 @@ urlpatterns = [
 
     # DETAIL
     path('image/<int:pk>/', ImageDetailView.as_view(), name='image_detail'),
+
+    # LIKE
+    path('like/', image_like, name='like'),
 
     # THUMBNAIL GENERATE
     #     path('generate-thumbnail', generate_thumbnail, name='generate-thumbnail'),

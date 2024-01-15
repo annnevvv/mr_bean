@@ -44,6 +44,23 @@ class HomeView(ListView):
         return ImageModel.objects.filter(private=False).order_by('-uploaded_at')
 
 
+def image_like(request):
+    image_id = request.POST.get('id')
+    action = request.POST.get('action')
+
+    if image_id and action:
+        try:
+            image = ImageModel.objects.get(id=image_id)
+            if action == 'like':
+                image.users_likes.add(request.user)
+            else:
+                image.users_likes.remove(request.user)
+            return JsonResponse({'status': 'ok'})
+        except ImageModel.DoesNotExist:
+            pass
+        return JsonResponse({'status': 'error'})
+
+
 class ImageFormView(LoginRequiredMixin, FormView):
     template_name = 'image_app/form_upload_img.html'
     form_class = ImageForm
@@ -246,7 +263,7 @@ def generate_thumbnail(request, image_id, th_width, th_height):
         return response
     else:
         raise Http404(
-            "Unsupported image format. Thumbnails can be created from jpg jpeg png formats.")
+            "Unsupported image format. Thumbnails can be created from jpg/jpeg/png formats.")
 
 
 class GenerateExpiringLinkView(LoginRequiredMixin, View):

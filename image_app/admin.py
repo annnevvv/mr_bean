@@ -16,7 +16,7 @@ class MiniatureSizeInline(admin.StackedInline):
     model = UserAccountTier.mini_size.through
 
 
-class SendedImageAdmin(admin.ModelAdmin):
+class ImageModelAdmin(admin.ModelAdmin):
     list_display = ['user', 'title', 'short_description', ]
     date_hierarchy = 'uploaded_at'
     ordering = ['uploaded_at', 'user', 'title']

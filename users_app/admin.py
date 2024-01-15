@@ -8,6 +8,7 @@ from .models import UserAccountTier, UserProfile, User
 # Register your models here.
 
 admin.site.register(UserAccountTier)
+admin.site.register(UserProfile)
 
 
 class UserAccountTierAdmin(admin.ModelAdmin):
