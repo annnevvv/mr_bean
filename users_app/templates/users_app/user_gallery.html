@@ -24,11 +24,11 @@
     </div>
 
     <div class="container">
-      <div class="d-flex flex-wrap p-1 justify-content-center ">
+      <div class="d-flex flex-wrap justify-content-center mt-auto">
       
         {% for img in img_sended_by_user %}
                 
-            <div class="card shadow m-2 bg-body rounded hover-efect" 
+            <div class="card m-2 rounded shadow hover-efect" 
                  style="width: 17rem; height: 36rem;">
 
               <div class="card-top-cover-img ">
@@ -45,50 +45,74 @@
                 </a>
               </div>    
 
-              <div class="card-body">
-                <h5 class="card-title">{{ img.title }}</h5>
-                <p class="card-text">{{ img.published_at }}</p>
-                <p class="card-text">{{ img.short_description|truncatewords:17 }}</p>
+              <div class="">
 
+                <h5 class="card-title card-header ">{{ img.title }}</h5>
+
+                <div class="card-body">
+
+                  <p class="card-text"> 
+                  <span>{{ img.users_likes.count }} </span> 
+                  likes  
+                  {% for like in img.users_likes.all|slice:":3" %} 
+                  form <b>{{ like.username }} </b>
+                  {% if not forloop.last %},{% endif %} 
+                  {% endfor %}...   </p>
+
+                  <p class="card-text">Uploaded: {{ img.uploaded_at }}</p>
+                  <p class="card-text">Updated: {{ img.updated_date }}</p>
+                  <p class="card-text">{{ img.short_description|truncatewords:17 }}</p>
+
+                </div>
+{% comment %} 
                 <ul class="list-group list-group-flush">
 
                   {% for tier in tiers %}
                  
                     {% if tier == user_profile.tier %}
-                    
+
+                      
                       {% for mini in tier.mini_size.all %}
 
                       <a href="{% url 'image_app:generate-thumbnail' image_id=img.pk th_width=mini.width th_height=mini.height  %}" 
-                      class="btn btn-primary m-1" 
+                      class="btn btn-outline-primary m-1" 
                       target="_blank">{{mini}}px</a>
                       {% endfor %}
-
-                      
+                    
                       {% if tier.presence_link_to_org_file %}
                       <a href="{% url 'image_app:image_detail' pk=img.pk %}" 
-                      class="btn btn-primary m-1"
+                      class="btn btn-outline-primary m-1"
                       target="_blank">Orginal IMG</a>
-                      {% endif %}
-                    
+                      {% endif %} 
 
                       {% if tier.ability_to_generate_expiring_links %}
-                      <a href="{% url 'image_app:generate-exp-link' image_id=img.pk th_time=3000  %}"  class="btn btn-primary m-1">Temporary Link</a> 
+                      <a href="{% url 'image_app:generate-exp-link' image_id=img.pk th_time=3000  %}"  class="btn btn-outline-primary m-1">Temporary Link</a> 
                       {% endif %}
+                    
 
                     {% endif %}
                   
                   {% endfor %}
-
-                  <div class="col">
-                    <a href="{% url 'image_app:image_update' pk=img.pk %}" class="btn btn-danger m-1">UPDATE</a>
-                    <a href="{% url 'image_app:image_delete' pk=img.pk %}" class="btn btn-danger m-1">DELETE</a>
+  {% endcomment %}
+  
+                
+                  <div class="col card-footer">
+                    <a 
+                    href="{% url 'image_app:image_update' pk=img.pk %}" 
+                    class="btn btn-outline-danger m-1">UPDATE</a>
+                    
+                    <a 
+                    href="{% url 'image_app:image_delete' pk=img.pk %}" 
+                    class="btn btn-outline-danger m-1">DELETE</a>
                   </div>
 
-                </ul>
+                </div>
+
+                
 
               </div>
 
-            </div>
+            
 
         {% endfor %}
       

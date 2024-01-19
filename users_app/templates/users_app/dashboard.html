@@ -28,16 +28,19 @@
           overflow: hidden;
         "
       >
-        <img src="{{ user_profile.avatar.url }}" style="max-height: 4rem;"/>
+        <img src="{{ user_profile.avatar.url }}" style="max-height: 100%"/>
       </a>
 
       <div class="card-body">
         <h2>Links to:</h2>
         <lu style="list-style: none; padding-left: 0; text-align: center">
           <li>
-            <a href="{% url 'image_app:form-upload-img' %} " target="_blank">
-              Add new picture </a
-            >- Upload form
+            <a 
+              class="btn btn-outline-success "          
+              href="{% url 'image_app:form-upload-img' %} " 
+              target="_blank">
+              Add new picture 
+            </a>
           </li>
         </lu>
       </div>

@@ -2,7 +2,7 @@ from django import forms
 from .models import ImageModel, ExpiringLink, ImageComment
 
 
-class ImageForm(forms.ModelForm):
+class ImageCreateForm(forms.ModelForm):
     class Meta:
         model = ImageModel
         fields = ['title', 'image_file', 'short_description']

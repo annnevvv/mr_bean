@@ -21,6 +21,18 @@ class ImageModel(models.Model):
     users_likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
 
+    # class Meta:
+    #     indexes = [
+    #         models.Index(fields=['-updated_date']),
+    #         models.Index(fields=['-users_likes']),
+    #     ]
+    #     ordering = ['uploaded_at']
+
+    # db_table = ''
+    # managed = True
+    # verbose_name = 'ModelName'
+    # verbose_name_plural = 'ModelNames'
+
     def __str__(self):
         return self.title
 

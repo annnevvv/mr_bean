@@ -14,7 +14,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from .serializers import ImageModelSerializer, ImageCommentModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
-from .forms import ImageForm, ExpiringLinkForm, ImageCommentForm, ImageUpdateForm
+from .forms import ImageCreateForm, ExpiringLinkForm, ImageCommentForm, ImageUpdateForm
 from .models import ImageModel, ImageComment, ExpiringLink, MiniatureSize
 from users_app.models import UserAccountTier, UserProfile
 
@@ -28,14 +28,14 @@ from PIL import Image
 class HomeView(ListView):
     # model = Image
     template_name = 'image_app/index.html'
-    # context_object_name = 'image_list'
-    # ordering = ['-uploaded_at']
-    paginate_by = 10
+    context_object_name = 'image_list'
+    ordering = ['-uploaded_at']
+    paginate_by = 8
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['image_list'] = ImageModel.objects.filter(
-            private=False).order_by('-uploaded_at')
+        # context['image_list'] = ImageModel.objects.filter(
+        #     private=False).order_by('-uploaded_at')
         context['tiers'] = UserAccountTier.objects.all().order_by('price')
         context['minis'] = MiniatureSize.objects.all()
         return context
@@ -63,7 +63,7 @@ def image_like(request):
 
 class ImageFormView(LoginRequiredMixin, FormView):
     template_name = 'image_app/form_upload_img.html'
-    form_class = ImageForm
+    form_class = ImageCreateForm
     success_url = reverse_lazy('image_app:success')
 
     def form_valid(self, form):
