@@ -146,14 +146,14 @@
                   {% with one=img.users_likes.all|slice:":2" %}
                     {% for o in one %}
                       <b>{{ o }}</b>
-                      {% if not forloop.last %},{% endif %}    
+                      {% if not forloop.last %},{% endif %}                    
                     {% endfor %}
 
-                    {% if img.users_likes.count == 1 %}
+                    {% if img.users_likes.count in 1 or 2 %}
                     like it!
                     {% endif %}
 
-                    {% if img.users_likes.count > 1 %}
+                    {% if img.users_likes.count > 2 %}
                     and others like it!
                     {% endif %}
                    
@@ -175,25 +175,37 @@
   </div>
 
 {% comment %} Pginator {% endcomment %}
-    <div class="pagination container d-flex justify-content-center">
+    <nav 
+    aria-label="Page navigation example"
+    class="pagination container d-flex justify-content-center">
 
-      <span class="step-links">
+      <ul class="pagination">
 
         {% if page_obj.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          <li class="page-item">
+            <a class="page-link link-danger link-underline-light" href="?page=1">&laquo; first</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link link-danger link-underline-light" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
         {% endif %}
 
-        <span class="current"> Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.</span>
+        <li class="page-item disabled ">
+          <span class="current page-link"> Page {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.</span>
+        </li>        
 
         {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">Next</a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          <li class="page-item">
+            <a class="page-link link-danger link-underline-light" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          <li class=" btnpage-item">
+            <a class="page-link link-danger link-underline-light" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          </li>
         {% endif %}
 
-      </span>
+      </ul>
 
-    </div>   
+    </nav>   
 
 </section>
 
