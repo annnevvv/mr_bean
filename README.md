@@ -48,3 +48,5 @@ Feel free to contact me via GitHub and LinkedIn.
 For any inquiries or feedback, please contact the project maintainer at GitHub.
 
 [![linkedin]](https://www.linkedin.com/in/annawalaszek/)
+
+![Tekst zastępczy](static\images\screenshots\login_page.png)
