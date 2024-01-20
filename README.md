@@ -49,4 +49,10 @@ For any inquiries or feedback, please contact the project maintainer at GitHub.
 
 [![linkedin]](https://www.linkedin.com/in/annawalaszek/)
 
-![Tekst zastępczy](static\images\screenshots\login_page.png)
+![home page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/home_page.png?raw=true)
+
+![signup page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/signup_page.png?raw=true)
+![login page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/login_page.png?raw=true)
+![dashboard page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/dashboard_page.png?raw=true)
+![profile page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/profile_page.png?raw=true)
+![gallery page](https://github.com/annnevvv/mr_bean/blob/main/static/images/screenshots/user_gallery_page.png?raw=true)
